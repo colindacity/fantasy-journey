@@ -1,0 +1,239 @@
+name: Deploy Fantasy Reading Guide to GitHub Pages
+
+on:
+  push:
+    branches:
+      - claude/redesign-youtube-clone-011CUP5xmZw5CYhippuyQtLw
+      - main
+    paths:
+      - 'fantasy-reading-guide/**'
+      - '.github/workflows/deploy-fantasy-guide.yml'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to deploy (optional)'
+        required: false
+        default: 'auto'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages-fantasy-guide"
+  cancel-in-progress: false
+
+env:
+  NODE_ENV: production
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate version info
+        id: version
+        run: |
+          # Generate version based on commit count and short SHA
+          COMMIT_COUNT=$(git rev-list --count HEAD)
+          SHORT_SHA=$(git rev-parse --short HEAD)
+          BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
+          BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+
+          if [ "${{ github.event.inputs.version }}" != "auto" ] && [ -n "${{ github.event.inputs.version }}" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+          else
+            VERSION="v1.${COMMIT_COUNT}-${SHORT_SHA}"
+          fi
+
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+          echo "build_date=${BUILD_DATE}" >> $GITHUB_OUTPUT
+          echo "commit_sha=${GITHUB_SHA}" >> $GITHUB_OUTPUT
+          echo "branch=${BRANCH_NAME}" >> $GITHUB_OUTPUT
+
+          echo "📦 Building version: ${VERSION}"
+          echo "📅 Build date: ${BUILD_DATE}"
+          echo "🔀 Branch: ${BRANCH_NAME}"
+          echo "📝 Commit: ${GITHUB_SHA}"
+
+      - name: Create version.json
+        run: |
+          cat > fantasy-reading-guide/version.json << EOF
+          {
+            "version": "${{ steps.version.outputs.version }}",
+            "buildDate": "${{ steps.version.outputs.build_date }}",
+            "commitSha": "${{ steps.version.outputs.commit_sha }}",
+            "branch": "${{ steps.version.outputs.branch }}",
+            "buildNumber": "${{ github.run_number }}",
+            "repository": "${{ github.repository }}",
+            "deployer": "GitHub Actions"
+          }
+          EOF
+
+          echo "📄 Generated version.json:"
+          cat fantasy-reading-guide/version.json
+
+      - name: Inject version into HTML
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          BUILD_DATE="${{ steps.version.outputs.build_date }}"
+
+          # Add version meta tag to HTML
+          sed -i "s|</head>|    <meta name=\"app-version\" content=\"${VERSION}\">\n    <meta name=\"build-date\" content=\"${BUILD_DATE}\">\n</head>|" fantasy-reading-guide/index.html
+
+          echo "✅ Injected version ${VERSION} into HTML"
+
+      - name: Add deployment banner
+        run: |
+          # Add a subtle version banner to the footer
+          cat >> fantasy-reading-guide/index.html << 'EOF'
+          <script>
+          console.log('%c🎮 Fantasy Reading Guide', 'font-size: 20px; font-weight: bold; color: #8b5cf6;');
+          console.log('%cVersion: ' + document.querySelector('meta[name="app-version"]')?.content, 'color: #ec4899;');
+          console.log('%cBuild Date: ' + document.querySelector('meta[name="build-date"]')?.content, 'color: #06b6d4;');
+          console.log('%c━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'color: #8b5cf6;');
+          </script>
+          EOF
+
+          echo "✅ Added deployment banner"
+
+      - name: Optimize assets
+        run: |
+          echo "🔧 Optimizing assets..."
+
+          # Remove comments from CSS (simple optimization)
+          find fantasy-reading-guide -name "*.css" -type f -exec sed -i '/^[[:space:]]*\/\*/,/\*\//d' {} \;
+
+          # Add cache busting to main files
+          VERSION="${{ steps.version.outputs.version }}"
+          sed -i "s|js/data.js|js/data.js?v=${VERSION}|g" fantasy-reading-guide/index.html
+          sed -i "s|js/map.js|js/map.js?v=${VERSION}|g" fantasy-reading-guide/index.html
+          sed -i "s|js/main.js|js/main.js?v=${VERSION}|g" fantasy-reading-guide/index.html
+          sed -i "s|css/styles.css|css/styles.css?v=${VERSION}|g" fantasy-reading-guide/index.html
+
+          echo "✅ Assets optimized with cache busting"
+
+      - name: Create deployment manifest
+        run: |
+          cat > fantasy-reading-guide/deployment-info.html << EOF
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>Deployment Info - Fantasy Reading Guide</title>
+              <style>
+                  body {
+                      font-family: monospace;
+                      background: #0a0a15;
+                      color: #f8fafc;
+                      padding: 2rem;
+                      line-height: 1.6;
+                  }
+                  .info {
+                      background: rgba(139, 92, 246, 0.1);
+                      border: 1px solid #8b5cf6;
+                      padding: 1.5rem;
+                      border-radius: 8px;
+                      max-width: 800px;
+                  }
+                  .label { color: #ec4899; font-weight: bold; }
+                  .value { color: #06b6d4; }
+                  h1 { color: #8b5cf6; }
+                  a { color: #fbbf24; text-decoration: none; }
+                  a:hover { text-decoration: underline; }
+              </style>
+          </head>
+          <body>
+              <h1>🚀 Fantasy Reading Guide - Deployment Info</h1>
+              <div class="info">
+                  <p><span class="label">Version:</span> <span class="value">${{ steps.version.outputs.version }}</span></p>
+                  <p><span class="label">Build Date:</span> <span class="value">${{ steps.version.outputs.build_date }}</span></p>
+                  <p><span class="label">Commit SHA:</span> <span class="value">${{ steps.version.outputs.commit_sha }}</span></p>
+                  <p><span class="label">Branch:</span> <span class="value">${{ steps.version.outputs.branch }}</span></p>
+                  <p><span class="label">Build Number:</span> <span class="value">${{ github.run_number }}</span></p>
+                  <p><span class="label">Repository:</span> <span class="value">${{ github.repository }}</span></p>
+                  <p><span class="label">Workflow:</span> <span class="value">${{ github.workflow }}</span></p>
+                  <p><span class="label">Triggered by:</span> <span class="value">${{ github.event_name }}</span></p>
+              </div>
+              <br>
+              <p><a href="index.html">← Back to Fantasy Reading Guide</a></p>
+              <p><a href="version.json">View version.json</a></p>
+          </body>
+          </html>
+          EOF
+
+          echo "✅ Created deployment manifest"
+
+      - name: Display build summary
+        run: |
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "🎯 Build Summary"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "Version:      ${{ steps.version.outputs.version }}"
+          echo "Build Date:   ${{ steps.version.outputs.build_date }}"
+          echo "Commit:       ${{ steps.version.outputs.commit_sha }}"
+          echo "Branch:       ${{ steps.version.outputs.branch }}"
+          echo "Build #:      ${{ github.run_number }}"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+          # Count files
+          FILE_COUNT=$(find fantasy-reading-guide -type f | wc -l)
+          echo "📁 Total files: ${FILE_COUNT}"
+
+          # Calculate total size
+          TOTAL_SIZE=$(du -sh fantasy-reading-guide | cut -f1)
+          echo "💾 Total size: ${TOTAL_SIZE}"
+
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'fantasy-reading-guide'
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: Display deployment URL
+        run: |
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "✅ Deployment Successful!"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "🌐 URL: ${{ steps.deployment.outputs.page_url }}"
+          echo "📊 Deployment Info: ${{ steps.deployment.outputs.page_url }}deployment-info.html"
+          echo "📦 Version: ${{ steps.deployment.outputs.page_url }}version.json"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+      - name: Create deployment summary
+        run: |
+          echo "## 🎉 Fantasy Reading Guide Deployed! " >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "🌐 **Live URL:** ${{ steps.deployment.outputs.page_url }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📋 Deployment Details" >> $GITHUB_STEP_SUMMARY
+          echo "- 🏷️ Build Number: \`${{ github.run_number }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- 📝 Commit: \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- 🔀 Branch: \`${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- 👤 Triggered by: \`${{ github.actor }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🔗 Quick Links" >> $GITHUB_STEP_SUMMARY
+          echo "- [📖 View Site](${{ steps.deployment.outputs.page_url }})" >> $GITHUB_STEP_SUMMARY
+          echo "- [ℹ️ Deployment Info](${{ steps.deployment.outputs.page_url }}deployment-info.html)" >> $GITHUB_STEP_SUMMARY
+          echo "- [📦 Version JSON](${{ steps.deployment.outputs.page_url }}version.json)" >> $GITHUB_STEP_SUMMARY

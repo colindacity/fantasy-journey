@@ -1,6 +1,149 @@
 // Main Application Logic
 // Handles modals, UI interactions, and YouTube embeds
 
+// Version and Build Information Logger
+class VersionLogger {
+    constructor() {
+        this.loadVersionInfo();
+    }
+
+    async loadVersionInfo() {
+        try {
+            const response = await fetch('version.json');
+            if (response.ok) {
+                const versionData = await response.json();
+                this.logVersion(versionData);
+                this.displayVersionBadge(versionData);
+                window.APP_VERSION = versionData;
+            } else {
+                this.logDevelopmentVersion();
+            }
+        } catch (error) {
+            this.logDevelopmentVersion();
+        }
+    }
+
+    logVersion(data) {
+        // Fancy console banner
+        const styles = {
+            title: 'font-size: 24px; font-weight: bold; color: #8b5cf6; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);',
+            subtitle: 'font-size: 14px; color: #ec4899; font-weight: bold;',
+            label: 'color: #06b6d4; font-weight: bold;',
+            value: 'color: #fbbf24;',
+            line: 'color: #8b5cf6;',
+            success: 'color: #10b981; font-weight: bold;'
+        };
+
+        console.log('%c                                                    ', 'background: linear-gradient(90deg, #8b5cf6, #ec4899); padding: 2px;');
+        console.log('%c🎮 Fantasy Reading Guide', styles.title);
+        console.log('%c   Your Interactive Journey Through Fantasy Literature', styles.subtitle);
+        console.log('%c━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', styles.line);
+
+        console.log(`%c📦 Version:      %c${data.version}`, styles.label, styles.value);
+        console.log(`%c📅 Build Date:   %c${new Date(data.buildDate).toLocaleString()}`, styles.label, styles.value);
+        console.log(`%c🔨 Build #:      %c${data.buildNumber}`, styles.label, styles.value);
+        console.log(`%c📝 Commit:       %c${data.commitSha?.substring(0, 7) || 'N/A'}`, styles.label, styles.value);
+        console.log(`%c🔀 Branch:       %c${data.branch}`, styles.label, styles.value);
+        console.log(`%c🤖 Deployer:     %c${data.deployer}`, styles.label, styles.value);
+
+        console.log('%c━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', styles.line);
+        console.log('%c✨ Based on "The ULTIMATE Fantasy Reading Guide" YouTube video', 'color: #cbd5e1; font-style: italic;');
+        console.log('%c🎬 https://www.youtube.com/watch?v=T0G-yYbqpNc', 'color: #94a3b8; font-style: italic;');
+        console.log('%c━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', styles.line);
+        console.log('%c✅ Application loaded successfully!', styles.success);
+        console.log('%cTip: Click any book on the map to begin your journey!', 'color: #cbd5e1;');
+        console.log('%c                                                    ', 'background: linear-gradient(90deg, #ec4899, #8b5cf6); padding: 2px;');
+
+        // Performance metrics
+        if (window.performance) {
+            const perfData = performance.getEntriesByType('navigation')[0];
+            if (perfData) {
+                console.group('%c⚡ Performance Metrics', 'color: #fbbf24; font-weight: bold;');
+                console.log(`%cPage Load: %c${(perfData.loadEventEnd - perfData.fetchStart).toFixed(2)}ms`, styles.label, styles.value);
+                console.log(`%cDOM Ready: %c${(perfData.domContentLoadedEventEnd - perfData.fetchStart).toFixed(2)}ms`, styles.label, styles.value);
+                console.groupEnd();
+            }
+        }
+
+        // Easter egg
+        console.log('%c\n🔮 Pro tip: Type "showAllBooks()" to list all books in the guide!', 'color: #8b5cf6; font-style: italic; font-size: 10px;');
+    }
+
+    logDevelopmentVersion() {
+        console.log('%c🛠️ Fantasy Reading Guide - Development Mode', 'font-size: 18px; font-weight: bold; color: #fbbf24;');
+        console.log('%cVersion: DEV', 'color: #ec4899;');
+        console.log('%cRunning locally without build pipeline', 'color: #94a3b8; font-style: italic;');
+
+        window.APP_VERSION = {
+            version: 'dev',
+            buildDate: new Date().toISOString(),
+            environment: 'development'
+        };
+    }
+
+    displayVersionBadge(data) {
+        // Add a subtle version badge to the footer
+        const footer = document.querySelector('.footer .container');
+        if (footer && data.version) {
+            const badge = document.createElement('p');
+            badge.style.cssText = 'font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem; font-family: monospace;';
+            badge.innerHTML = `v${data.version} | Build #${data.buildNumber} | ${new Date(data.buildDate).toLocaleDateString()}`;
+            footer.appendChild(badge);
+        }
+    }
+}
+
+// Developer console utilities
+window.showAllBooks = function() {
+    console.table(
+        fantasyData.nodes.map(node => ({
+            Title: node.title,
+            Author: node.author,
+            Type: node.type,
+            Subgenre: node.subgenre || '-',
+            'Must Read': node.mustRead ? '⭐' : '-'
+        }))
+    );
+    console.log(`%c📚 Total books in guide: ${fantasyData.nodes.length}`, 'color: #8b5cf6; font-weight: bold;');
+};
+
+window.findBook = function(searchTerm) {
+    const results = fantasyData.nodes.filter(node =>
+        node.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        node.author.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    if (results.length > 0) {
+        console.table(results.map(node => ({
+            Title: node.title,
+            Author: node.author,
+            Type: node.type
+        })));
+    } else {
+        console.log('%c❌ No books found matching: ' + searchTerm, 'color: #ef4444;');
+    }
+    return results;
+};
+
+window.getStats = function() {
+    const stats = {
+        totalBooks: fantasyData.nodes.length,
+        mustReads: fantasyData.nodes.filter(n => n.mustRead).length,
+        byType: {},
+        subgenres: new Set()
+    };
+
+    fantasyData.nodes.forEach(node => {
+        stats.byType[node.type] = (stats.byType[node.type] || 0) + 1;
+        if (node.subgenre) stats.subgenres.add(node.subgenre);
+    });
+
+    stats.subgenres = stats.subgenres.size;
+
+    console.log('%c📊 Fantasy Reading Guide Statistics', 'font-size: 16px; font-weight: bold; color: #8b5cf6;');
+    console.table(stats);
+    return stats;
+};
+
 class FantasyGuideApp {
     constructor() {
         this.modal = document.getElementById('book-modal');
@@ -475,8 +618,12 @@ class ProgressTracker {
 let app;
 let bookSearch;
 let progressTracker;
+let versionLogger;
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Initialize version logging first
+    versionLogger = new VersionLogger();
+
     app = new FantasyGuideApp();
     bookSearch = new BookSearch();
     progressTracker = new ProgressTracker();

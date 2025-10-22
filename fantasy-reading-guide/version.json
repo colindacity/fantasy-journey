@@ -1,0 +1,10 @@
+{
+  "version": "dev",
+  "buildDate": "2025-10-22T00:00:00Z",
+  "commitSha": "local-development",
+  "branch": "local",
+  "buildNumber": "0",
+  "repository": "colindacity/fantasy-journey",
+  "deployer": "Local Development",
+  "environment": "development"
+}

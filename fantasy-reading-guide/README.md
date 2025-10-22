@@ -85,6 +85,48 @@ This interactive guide transforms a linear YouTube video into an explorable fant
 - **YouTube API** - Embedded video snippets with timestamps
 - **Local Storage** - Track your reading journey progress
 - **Responsive Design** - Mobile-first approach
+- **GitHub Actions** - Automated CI/CD pipeline
+- **GitHub Pages** - Free, fast hosting
+
+## 🚀 CI/CD & Deployment
+
+This project features a comprehensive **automated deployment pipeline** using GitHub Actions:
+
+### Automatic Deployment
+- Pushes to main branch trigger automatic deployment
+- Version numbers auto-generated from commit history
+- Assets optimized and cache-busted automatically
+- Deploys to GitHub Pages within minutes
+
+### Version Tracking
+Every deployment includes:
+- **Console Logging** - Beautiful version banner in browser console
+- **version.json** - Machine-readable build metadata
+- **Deployment Dashboard** - Human-readable deployment info page
+
+### Console Version Display
+When you open the site, check the browser console to see:
+```
+🎮 Fantasy Reading Guide
+   Your Interactive Journey Through Fantasy Literature
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📦 Version:      v1.245-a1b2c3d
+📅 Build Date:   10/22/2025, 12:00:00 AM
+🔨 Build #:      42
+📝 Commit:       a1b2c3d
+🔀 Branch:       main
+🤖 Deployer:     GitHub Actions
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ Application loaded successfully!
+```
+
+### Developer Tools
+The console also includes helpful utilities:
+- `showAllBooks()` - Display all books in a table
+- `findBook('search')` - Search for specific books
+- `getStats()` - View guide statistics
+
+See [DEPLOYMENT.md](../DEPLOYMENT.md) for complete CI/CD documentation.
 
 ## 🎮 Controls
 
