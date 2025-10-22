@@ -3,29 +3,6 @@
 // A top-down RPG for discovering fantasy books
 // ============================================
 
-// Game Configuration
-const config = {
-  type: Phaser.AUTO,
-  width: Math.min(1280, window.innerWidth),
-  height: Math.min(720, window.innerHeight),
-  parent: 'game-container',
-  backgroundColor: '#1a1a2e',
-  physics: {
-    default: 'arcade',
-    arcade: {
-      gravity: { y: 0 },
-      debug: false
-    }
-  },
-  scene: [PreloadScene, MainWorldScene, LibraryScene, BookstoreScene, AuthorLandScene, WritersWorkshopScene, PlayerHomeScene],
-  scale: {
-    mode: Phaser.Scale.FIT,
-    autoCenter: Phaser.Scale.CENTER_BOTH
-  },
-  pixelArt: false,
-  roundPixels: true
-};
-
 // Game State
 const gameState = {
   playerName: 'Reader',
@@ -37,16 +14,8 @@ const gameState = {
 };
 
 // Mobile detection
-const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.UA) ||
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
                  ('ontouchstart' in window);
-
-if (isMobile) {
-  document.getElementById('mobile-controls').classList.add('show');
-  document.getElementById('actionButton').classList.add('show');
-}
-
-// Start the game
-const game = new Phaser.Game(config);
 
 // ============================================
 // PRELOAD SCENE
@@ -854,3 +823,38 @@ class PlayerHomeScene extends LibraryScene {
     this.updateLocationLabel('Your Home - Your Personal Fantasy Library');
   }
 }
+
+// ============================================
+// GAME CONFIGURATION & INITIALIZATION
+// ============================================
+
+const config = {
+  type: Phaser.AUTO,
+  width: Math.min(1280, window.innerWidth),
+  height: Math.min(720, window.innerHeight),
+  parent: 'game-container',
+  backgroundColor: '#1a1a2e',
+  physics: {
+    default: 'arcade',
+    arcade: {
+      gravity: { y: 0 },
+      debug: false
+    }
+  },
+  scene: [PreloadScene, MainWorldScene, LibraryScene, BookstoreScene, AuthorLandScene, WritersWorkshopScene, PlayerHomeScene],
+  scale: {
+    mode: Phaser.Scale.FIT,
+    autoCenter: Phaser.Scale.CENTER_BOTH
+  },
+  pixelArt: false,
+  roundPixels: true
+};
+
+// Initialize mobile controls if on mobile device
+if (isMobile) {
+  document.getElementById('mobile-controls').classList.add('show');
+  document.getElementById('actionButton').classList.add('show');
+}
+
+// Start the game!
+const game = new Phaser.Game(config);
