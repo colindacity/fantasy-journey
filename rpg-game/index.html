@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>Fantasy Reading Quest - Interactive RPG</title>
   <style>
     * {
@@ -291,7 +294,13 @@
   <!-- Phaser 3 -->
   <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
 
-  <!-- Game Scripts - v1.0.1 with console logging -->
-  <script src="game.js?v=1.0.1"></script>
+  <!-- Game Scripts - Auto cache-busting -->
+  <script>
+    // Auto cache-buster using current timestamp
+    const cacheBuster = Date.now();
+    const script = document.createElement('script');
+    script.src = 'game.js?v=' + cacheBuster;
+    document.body.appendChild(script);
+  </script>
 </body>
 </html>
