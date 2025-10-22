@@ -396,10 +396,7 @@ class MainWorldScene extends Phaser.Scene {
     const water = this.add.circle(x, y, 50, 0x4682b4, 0.6);
 
     // Particle fountain
-    const particles = this.add.particles('spark');
-    const emitter = particles.createEmitter({
-      x: x,
-      y: y - 20,
+    const particles = this.add.particles(x, y - 20, 'spark', {
       speed: { min: 50, max: 150 },
       angle: { min: 260, max: 280 },
       scale: { start: 0.3, end: 0 },
@@ -436,8 +433,7 @@ class MainWorldScene extends Phaser.Scene {
     this.shadow = shadow;
 
     // Particle trail when moving
-    this.playerParticles = this.add.particles('particle');
-    this.playerTrail = this.playerParticles.createEmitter({
+    this.playerTrail = this.add.particles(0, 0, 'particle', {
       follow: this.player,
       quantity: 1,
       scale: { start: 0.2, end: 0 },
@@ -445,7 +441,7 @@ class MainWorldScene extends Phaser.Scene {
       tint: 0xffd700,
       lifespan: 500,
       frequency: 100,
-      on: false
+      emitting: false
     });
 
     this.player.play('idle');
@@ -552,10 +548,7 @@ class MainWorldScene extends Phaser.Scene {
   }
 
   createZoneParticles(x, y, color) {
-    const particles = this.add.particles('spark');
-    const emitter = particles.createEmitter({
-      x: x,
-      y: y,
+    const particles = this.add.particles(x, y, 'spark', {
       speed: 20,
       angle: { min: 0, max: 360 },
       scale: { start: 0.2, end: 0 },
@@ -570,10 +563,8 @@ class MainWorldScene extends Phaser.Scene {
 
   addAmbientParticles() {
     // Floating magical particles across the scene
-    const particles = this.add.particles('particle');
-    const emitter = particles.createEmitter({
-      x: { min: 0, max: 1600 },
-      y: -10,
+    this.add.particles(800, -10, 'particle', {
+      emitZone: { type: 'random', source: new Phaser.Geom.Rectangle(0, 0, 1600, 20) },
       speedY: { min: 20, max: 50 },
       speedX: { min: -10, max: 10 },
       scale: { start: 0.3, end: 0 },
@@ -586,10 +577,8 @@ class MainWorldScene extends Phaser.Scene {
 
   addWeatherEffects() {
     // Subtle floating leaves or sparkles
-    const sparkles = this.add.particles('spark');
-    const emitter = sparkles.createEmitter({
-      x: { min: -100, max: 1700 },
-      y: { min: 0, max: 1200 },
+    this.add.particles(800, 600, 'spark', {
+      emitZone: { type: 'random', source: new Phaser.Geom.Rectangle(-100, 0, 1800, 1200) },
       speedX: { min: 10, max: 30 },
       speedY: { min: -5, max: 5 },
       scale: { start: 0.15, end: 0 },
@@ -934,10 +923,7 @@ class BaseIndoorScene extends Phaser.Scene {
     const chandelier = this.add.circle(x, y, 25, 0xffd700, 0.8);
 
     // Add light rays
-    const particles = this.add.particles('spark');
-    const emitter = particles.createEmitter({
-      x: x,
-      y: y,
+    this.add.particles(x, y, 'spark', {
       speed: 10,
       angle: { min: 0, max: 360 },
       scale: { start: 0.3, end: 0 },
@@ -1070,10 +1056,7 @@ class BaseIndoorScene extends Phaser.Scene {
     });
 
     // Add sparkle particles
-    const particles = this.add.particles('spark');
-    const emitter = particles.createEmitter({
-      x: data.x,
-      y: data.y,
+    this.add.particles(data.x, data.y, 'spark', {
       speed: 10,
       angle: { min: 0, max: 360 },
       scale: { start: 0.2, end: 0 },
@@ -1158,26 +1141,23 @@ class BaseIndoorScene extends Phaser.Scene {
       gameState.booksCollected++;
 
       // Explosion of particles
-      const particles = this.add.particles('spark');
-      const burst = particles.createEmitter({
-        x: book.x,
-        y: book.y,
+      const burst = this.add.particles(book.x, book.y, 'spark', {
         speed: { min: 100, max: 200 },
         angle: { min: 0, max: 360 },
         scale: { start: 0.5, end: 0 },
         alpha: { start: 1, end: 0 },
         tint: bookInfo.color,
         lifespan: 1000,
-        quantity: 20,
-        blendMode: 'ADD'
+        blendMode: 'ADD',
+        emitting: false
       });
 
-      burst.explode();
+      burst.explode(20);
 
       // Flash effect
       this.cameras.main.flash(200, 255, 255, 255, false, (camera, progress) => {
         if (progress === 1) {
-          particles.destroy();
+          burst.destroy();
         }
       });
 
