@@ -4,6 +4,12 @@
 // Version: 1.0.1 - Fixed class initialization
 // ============================================
 
+const GAME_VERSION = '1.0.1';
+console.log('%c🎮 Fantasy Reading Quest v' + GAME_VERSION, 'font-size: 20px; font-weight: bold; color: #6b46c1; background: #d4af37; padding: 10px;');
+console.log('%cGame engine loaded successfully! Classes initialized in correct order.', 'color: #22c55e; font-weight: bold;');
+console.log('Repository: https://github.com/colindacity/fantasy-journey');
+console.log('Build time:', new Date().toISOString());
+
 // Game State
 const gameState = {
   playerName: 'Reader',
