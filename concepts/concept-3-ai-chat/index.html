@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Concept 3: AI Chat Guide | Fantasy Reading Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lora:wght@400;600&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../shared/styles/theme.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="chat-container">
+    <!-- Header -->
+    <header class="chat-header">
+      <a href="../../index.html" class="back-btn">← Back</a>
+      <div class="chat-header-info">
+        <div class="daniel-avatar">DG</div>
+        <div>
+          <h1 class="chat-title">Daniel Greene AI</h1>
+          <p class="chat-status"><span class="status-dot"></span> Online</p>
+        </div>
+      </div>
+      <button class="reset-chat-btn" id="resetChatBtn">🔄</button>
+    </header>
+
+    <!-- Chat Messages -->
+    <main class="chat-messages" id="chatMessages">
+      <div class="chat-welcome">
+        <div class="welcome-avatar">📚</div>
+        <h2>Welcome to Your Personal Fantasy Guide</h2>
+        <p>Chat with an AI trained on Daniel Greene's recommendations. I'll help you find your perfect fantasy subgenre through conversation.</p>
+        <div class="ornament"></div>
+      </div>
+    </main>
+
+    <!-- Chat Input -->
+    <footer class="chat-input-container">
+      <div class="quick-replies" id="quickReplies">
+        <!-- Quick reply buttons will be inserted here -->
+      </div>
+      <div class="chat-input-wrapper">
+        <input
+          type="text"
+          id="chatInput"
+          class="chat-input"
+          placeholder="Type your message or use quick replies..."
+          autocomplete="off"
+        />
+        <button class="send-btn" id="sendBtn">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 8L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </footer>
+
+    <!-- Typing Indicator -->
+    <div class="typing-indicator" id="typingIndicator" style="display: none;">
+      <div class="typing-dot"></div>
+      <div class="typing-dot"></div>
+      <div class="typing-dot"></div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

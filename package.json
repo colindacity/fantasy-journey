@@ -1,0 +1,18 @@
+{
+  "name": "fantasy-reading-guide-app",
+  "version": "1.0.0",
+  "description": "Interactive Fantasy Reading Guide - 4 Concept Demos for Daniel Greene",
+  "author": "Digital Design Agency",
+  "license": "MIT",
+  "scripts": {
+    "dev": "python3 -m http.server 8000",
+    "start": "python3 -m http.server 8000"
+  },
+  "keywords": [
+    "fantasy",
+    "books",
+    "reading-guide",
+    "daniel-greene",
+    "interactive"
+  ]
+}

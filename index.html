@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fantasy Reading Guide - Concept Demos | Daniel Greene</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lora:wght@400;600&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared/styles/theme.css">
+  <style>
+    .landing-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: var(--spacing-lg);
+      min-height: 100vh;
+    }
+
+    .hero {
+      text-align: center;
+      padding: var(--spacing-xl) 0;
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .hero-title {
+      background: var(--gradient-mystical);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: var(--spacing-md);
+    }
+
+    .hero-subtitle {
+      color: var(--color-dark-leather);
+      font-size: clamp(1.2rem, 3vw, 1.5rem);
+      max-width: 800px;
+      margin: 0 auto var(--spacing-sm);
+      font-family: var(--font-body);
+      font-style: italic;
+    }
+
+    .daniel-quote {
+      background: var(--color-light);
+      border-left: 4px solid var(--color-gold);
+      padding: var(--spacing-md);
+      margin: var(--spacing-lg) auto;
+      max-width: 700px;
+      border-radius: var(--border-radius);
+      font-style: italic;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .concepts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: var(--spacing-lg);
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .concept-card {
+      background: var(--color-light);
+      border-radius: var(--border-radius-lg);
+      padding: var(--spacing-lg);
+      box-shadow: var(--shadow-md);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .concept-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: var(--gradient-mystical);
+    }
+
+    .concept-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-lg), var(--shadow-glow);
+    }
+
+    .concept-number {
+      display: inline-block;
+      width: 50px;
+      height: 50px;
+      background: var(--gradient-mystical);
+      color: var(--color-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: var(--spacing-md);
+    }
+
+    .concept-title {
+      color: var(--color-mystical-purple);
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .concept-description {
+      color: var(--color-dark-leather);
+      margin-bottom: var(--spacing-md);
+      line-height: 1.7;
+    }
+
+    .concept-features {
+      list-style: none;
+      margin-bottom: var(--spacing-md);
+      padding-left: 0;
+    }
+
+    .concept-features li {
+      padding: var(--spacing-xs) 0;
+      position: relative;
+      padding-left: 24px;
+    }
+
+    .concept-features li::before {
+      content: '⚔';
+      position: absolute;
+      left: 0;
+      color: var(--color-gold);
+    }
+
+    .concept-link {
+      display: block;
+      width: 100%;
+      padding: var(--spacing-sm);
+      background: var(--gradient-mystical);
+      color: var(--color-light);
+      text-decoration: none;
+      border-radius: var(--border-radius);
+      text-align: center;
+      font-family: var(--font-modern);
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .concept-link:hover {
+      transform: scale(1.05);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .features-section {
+      background: var(--color-light);
+      border-radius: var(--border-radius-lg);
+      padding: var(--spacing-xl);
+      margin-bottom: var(--spacing-xl);
+      box-shadow: var(--shadow-md);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: var(--spacing-md);
+      margin-top: var(--spacing-lg);
+    }
+
+    .feature-item {
+      text-align: center;
+      padding: var(--spacing-md);
+    }
+
+    .feature-icon {
+      font-size: 3rem;
+      margin-bottom: var(--spacing-sm);
+      display: block;
+    }
+
+    .feature-title {
+      font-family: var(--font-display);
+      color: var(--color-mystical-purple);
+      margin-bottom: var(--spacing-xs);
+      font-size: 1.2rem;
+    }
+
+    .footer {
+      text-align: center;
+      padding: var(--spacing-lg);
+      color: var(--color-dark-leather);
+      font-family: var(--font-modern);
+    }
+
+    .video-section {
+      background: var(--color-light);
+      border-radius: var(--border-radius-lg);
+      padding: var(--spacing-xl);
+      margin-bottom: var(--spacing-xl);
+      box-shadow: var(--shadow-md);
+      text-align: center;
+    }
+
+    .video-link {
+      display: inline-block;
+      padding: var(--spacing-md) var(--spacing-xl);
+      background: var(--color-deep-red);
+      color: var(--color-light);
+      text-decoration: none;
+      border-radius: var(--border-radius);
+      font-family: var(--font-modern);
+      font-weight: 600;
+      margin-top: var(--spacing-md);
+      transition: all 0.3s ease;
+    }
+
+    .video-link:hover {
+      background: #a01848;
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 768px) {
+      .concepts-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding: var(--spacing-lg) 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="landing-container">
+    <header class="hero fade-in">
+      <h1 class="hero-title">The ULTIMATE Fantasy Reading Guide</h1>
+      <p class="hero-subtitle">Interactive Web App Concepts for Daniel Greene</p>
+      <div class="ornament"></div>
+      <p style="max-width: 700px; margin: var(--spacing-md) auto; font-family: var(--font-modern);">
+        Navigate the world and history of fantasy literature with Daniel's humor, style, and expert guidance. Track your reading journey, discover new subgenres, and evolve your tastes.
+      </p>
+    </header>
+
+    <div class="daniel-quote fade-in">
+      <p>"Let's be real. This is far from the weirdest start to one of my videos there's ever been. Today we are going to be going through the ultimate fantasy reading guide...we are not just going to be telling you good starting points for fantasy. But instead I am going to dive deep into a methodology to find which specific subgenre you may become addicted to."</p>
+      <strong>— Daniel Greene</strong>
+    </div>
+
+    <section class="video-section fade-in">
+      <h2>Based on Daniel's Video</h2>
+      <p>These concepts bring Daniel's comprehensive fantasy flowchart to life in four unique interactive experiences.</p>
+      <a href="https://www.youtube.com/watch?v=T0G-yYbqpNc" target="_blank" class="video-link">
+        📺 Watch the Original Video
+      </a>
+    </section>
+
+    <section class="concepts-grid">
+      <article class="concept-card fade-in" style="animation-delay: 0.1s">
+        <div class="concept-number">1</div>
+        <h3 class="concept-title">Interactive Flowchart Journey</h3>
+        <p class="concept-description">
+          A stunning visual decision tree that brings Daniel's whiteboard to life. Navigate through beautifully animated nodes with his commentary at every step.
+        </p>
+        <ul class="concept-features">
+          <li>Animated, clickable flowchart navigation</li>
+          <li>Video snippets at decision points</li>
+          <li>Daniel's jokes and quotes integrated</li>
+          <li>Save progress and return anytime</li>
+          <li>Visual book recommendations</li>
+        </ul>
+        <a href="concepts/concept-1-flowchart/index.html" class="concept-link">Explore Concept 1 →</a>
+      </article>
+
+      <article class="concept-card fade-in" style="animation-delay: 0.2s">
+        <div class="concept-number">2</div>
+        <h3 class="concept-title">Personality Quiz System</h3>
+        <p class="concept-description">
+          Take an engaging quiz infused with Daniel's humor to discover your perfect fantasy subgenre. AI-powered recommendations based on your preferences.
+        </p>
+        <ul class="concept-features">
+          <li>Dynamic quiz with witty responses</li>
+          <li>AI analysis of reading preferences</li>
+          <li>Creates personalized reader profile</li>
+          <li>Video explanations for recommendations</li>
+          <li>Share results on social media</li>
+        </ul>
+        <a href="concepts/concept-2-quiz/index.html" class="concept-link">Explore Concept 2 →</a>
+      </article>
+
+      <article class="concept-card fade-in" style="animation-delay: 0.3s">
+        <div class="concept-number">3</div>
+        <h3 class="concept-title">Conversational AI Guide</h3>
+        <p class="concept-description">
+          Chat with an AI trained on Daniel's style and humor. Get personalized recommendations through natural conversation.
+        </p>
+        <ul class="concept-features">
+          <li>Chat interface mimicking Daniel's voice</li>
+          <li>Ethically sourced LLM integration</li>
+          <li>Personalized back-and-forth dialogue</li>
+          <li>Book cover and video integration</li>
+          <li>Context-aware recommendations</li>
+        </ul>
+        <a href="concepts/concept-3-ai-chat/index.html" class="concept-link">Explore Concept 3 →</a>
+      </article>
+
+      <article class="concept-card fade-in" style="animation-delay: 0.4s">
+        <div class="concept-number">4</div>
+        <h3 class="concept-title">Gamified RPG Journey</h3>
+        <p class="concept-description">
+          Your reading journey becomes an RPG adventure. Unlock new territories, level up, and earn achievements as you explore fantasy subgenres.
+        </p>
+        <ul class="concept-features">
+          <li>RPG-style character progression</li>
+          <li>Map-based UI showing subgenres</li>
+          <li>Achievement system and badges</li>
+          <li>Track books read and unlock paths</li>
+          <li>Leaderboards and challenges</li>
+        </ul>
+        <a href="concepts/concept-4-gamified/index.html" class="concept-link">Explore Concept 4 →</a>
+      </article>
+    </section>
+
+    <section class="features-section fade-in">
+      <h2 style="text-align: center; color: var(--color-mystical-purple);">Core Features Across All Concepts</h2>
+      <div class="ornament"></div>
+      <div class="features-grid">
+        <div class="feature-item">
+          <span class="feature-icon">📱</span>
+          <h4 class="feature-title">Mobile Optimized</h4>
+          <p>Beautiful responsive design for any device</p>
+        </div>
+        <div class="feature-item">
+          <span class="feature-icon">🎭</span>
+          <h4 class="feature-title">Daniel's Humor</h4>
+          <p>Integrated jokes, quotes, and personality</p>
+        </div>
+        <div class="feature-item">
+          <span class="feature-icon">🤖</span>
+          <h4 class="feature-title">Ethical AI</h4>
+          <p>Responsibly sourced LLM recommendations</p>
+        </div>
+        <div class="feature-item">
+          <span class="feature-icon">🎬</span>
+          <h4 class="feature-title">Video Integration</h4>
+          <p>Snippets from Daniel's videos throughout</p>
+        </div>
+        <div class="feature-item">
+          <span class="feature-icon">📚</span>
+          <h4 class="feature-title">Reading Tracker</h4>
+          <p>Track what you've read and evolve tastes</p>
+        </div>
+        <div class="feature-item">
+          <span class="feature-icon">🎨</span>
+          <h4 class="feature-title">Beautiful UI</h4>
+          <p>Stunning fantasy-themed design</p>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="ornament"></div>
+      <p>Concept Demos for Daniel Greene's Fantasy Reading Guide</p>
+      <p style="margin-top: var(--spacing-sm); color: var(--color-mystical-purple);">
+        <strong>Based on:</strong> "The ULTIMATE Fantasy Reading Guide (Where to Start & Find What You Like)"
+      </p>
+      <p style="margin-top: var(--spacing-xs);">
+        <a href="https://www.youtube.com/watch?v=T0G-yYbqpNc" target="_blank" style="color: var(--color-deep-red); text-decoration: none;">
+          Watch on YouTube
+        </a>
+      </p>
+    </footer>
+  </div>
+
+  <script>
+    // Add fade-in animation on scroll for better UX
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    });
+
+    document.querySelectorAll('.fade-in').forEach((el) => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(20px)';
+      el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+      observer.observe(el);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Concept 2: Personality Quiz | Fantasy Reading Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lora:wght@400;600&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../shared/styles/theme.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="quiz-container">
+    <!-- Header -->
+    <header class="quiz-header">
+      <a href="../../index.html" class="back-btn">← Back to Concepts</a>
+      <h1 class="quiz-logo">Fantasy Reader Personality Quiz</h1>
+    </header>
+
+    <!-- Welcome Screen -->
+    <section class="welcome-screen" id="welcomeScreen">
+      <div class="welcome-content">
+        <h2 class="welcome-title">Find Your Fantasy Subgenre Niche</h2>
+        <div class="ornament"></div>
+        <div class="daniel-intro">
+          <p>"Let's be real. Today we are going to find which specific subgenre you may become addicted to. Find that little itch they need scratched to find catharsis to release their inner demons."</p>
+          <strong>— Daniel Greene</strong>
+        </div>
+        <div class="welcome-description">
+          <p>Take this personality quiz to discover your perfect fantasy reading style. Answer honestly, and I'll analyze your preferences to recommend books that'll scratch that itch just right.</p>
+          <p><strong>Fair warning:</strong> You might discover you're a freak for hard magic systems or that you need therapy due to your love of grimdark. Either way, I'm here to help.</p>
+        </div>
+        <button class="btn btn-primary start-quiz-btn" id="startQuizBtn">
+          Start the Quiz 📚
+        </button>
+      </div>
+    </section>
+
+    <!-- Quiz Screen -->
+    <section class="quiz-screen" id="quizScreen" style="display: none;">
+      <div class="quiz-progress-bar">
+        <div class="quiz-progress-fill" id="progressFill"></div>
+      </div>
+      <div class="quiz-progress-text" id="progressText">Question 1 of 10</div>
+
+      <div class="question-container" id="questionContainer">
+        <!-- Questions will be dynamically inserted -->
+      </div>
+    </section>
+
+    <!-- Results Screen -->
+    <section class="results-screen" id="resultsScreen" style="display: none;">
+      <div class="results-content">
+        <h2 class="results-title" id="resultsTitle"></h2>
+        <div class="ornament"></div>
+
+        <div class="personality-badge" id="personalityBadge">
+          <div class="badge-icon"></div>
+        </div>
+
+        <div class="daniel-verdict" id="danielVerdict"></div>
+
+        <div class="results-description" id="resultsDescription"></div>
+
+        <div class="recommendations-section">
+          <h3>Your Reading List</h3>
+          <div id="recommendationsList"></div>
+        </div>
+
+        <div class="subgenre-breakdown">
+          <h3>Your Fantasy DNA</h3>
+          <canvas id="radarChart" width="400" height="400"></canvas>
+        </div>
+
+        <div class="results-actions">
+          <button class="btn btn-primary" id="retakeBtn">Retake Quiz</button>
+          <button class="btn btn-secondary" id="shareBtn">Share Results</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

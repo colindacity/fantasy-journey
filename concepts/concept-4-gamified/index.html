@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Concept 4: Gamified RPG Journey | Fantasy Reading Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lora:wght@400;600&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../shared/styles/theme.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="game-container">
+    <!-- Header HUD -->
+    <header class="game-hud">
+      <a href="../../index.html" class="back-btn">← Exit Quest</a>
+
+      <div class="player-stats">
+        <div class="stat-item">
+          <span class="stat-label">Level</span>
+          <span class="stat-value" id="playerLevel">1</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">XP</span>
+          <div class="xp-bar">
+            <div class="xp-fill" id="xpFill" style="width: 0%"></div>
+            <span class="xp-text" id="xpText">0 / 100</span>
+          </div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Books Read</span>
+          <span class="stat-value" id="booksCount">0</span>
+        </div>
+      </div>
+
+      <button class="achievements-btn" id="achievementsBtn">
+        🏆 <span id="achievementCount">0</span>
+      </button>
+    </header>
+
+    <!-- Character Creation Screen -->
+    <section class="character-creation" id="characterCreation">
+      <div class="creation-content">
+        <h1 class="creation-title">Begin Your Reading Quest</h1>
+        <div class="ornament"></div>
+
+        <div class="daniel-greeting">
+          <p>"Alright adventurer, let's create your reader profile. This isn't just for show - this actually helps me recommend the right books for YOUR journey."</p>
+          <strong>— Daniel Greene, Your Quest Giver</strong>
+        </div>
+
+        <div class="creation-form">
+          <div class="form-group">
+            <label for="characterName">Reader Name</label>
+            <input type="text" id="characterName" placeholder="Enter your name..." maxlength="20">
+          </div>
+
+          <div class="form-group">
+            <label>Choose Your Starting Class</label>
+            <div class="class-grid">
+              <div class="class-card" data-class="novice">
+                <div class="class-icon">📖</div>
+                <h3>Novice Reader</h3>
+                <p>New to fantasy. Starting fresh!</p>
+              </div>
+              <div class="class-card" data-class="scholar">
+                <div class="class-icon">🎓</div>
+                <h3>Fantasy Scholar</h3>
+                <p>Well-read. Seeking new territories.</p>
+              </div>
+              <div class="class-card" data-class="explorer">
+                <div class="class-icon">🗺️</div>
+                <h3>Genre Explorer</h3>
+                <p>Love variety. Try everything!</p>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn btn-primary" id="startQuestBtn" disabled>Begin Your Journey</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Game Screen -->
+    <main class="game-main" id="gameMain" style="display: none;">
+      <!-- Map Section -->
+      <section class="map-section">
+        <h2 class="section-title">Fantasy Realm Map</h2>
+        <div class="map-container" id="mapContainer">
+          <svg class="map-svg" viewBox="0 0 1000 600" id="mapSvg">
+            <!-- Map territories will be drawn here -->
+          </svg>
+        </div>
+        <div class="map-legend">
+          <div class="legend-item">
+            <span class="legend-icon unlocked">✓</span> Unlocked
+          </div>
+          <div class="legend-item">
+            <span class="legend-icon locked">🔒</span> Locked
+          </div>
+          <div class="legend-item">
+            <span class="legend-icon current">★</span> Current
+          </div>
+        </div>
+      </section>
+
+      <!-- Quest Section -->
+      <section class="quest-section">
+        <h2 class="section-title">Active Quest</h2>
+        <div class="quest-card" id="activeQuest">
+          <div class="quest-header">
+            <h3 id="questTitle">Loading...</h3>
+            <span class="quest-difficulty" id="questDifficulty">Beginner</span>
+          </div>
+          <p class="quest-description" id="questDescription"></p>
+          <div class="quest-book" id="questBook"></div>
+          <div class="quest-actions">
+            <button class="btn btn-primary" id="completeQuestBtn">Mark as Read</button>
+            <button class="btn btn-secondary" id="nextQuestBtn">Skip Quest</button>
+          </div>
+        </div>
+
+        <!-- Achievement Notifications -->
+        <div class="achievement-notification" id="achievementNotif" style="display: none;">
+          <div class="achievement-content">
+            <span class="achievement-icon">🏆</span>
+            <div>
+              <strong id="achievementTitle"></strong>
+              <p id="achievementDesc"></p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Achievements Modal -->
+    <div class="modal" id="achievementsModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>🏆 Achievements</h2>
+          <button class="close-modal" id="closeAchievementsBtn">×</button>
+        </div>
+        <div class="ornament"></div>
+        <div class="achievements-grid" id="achievementsGrid">
+          <!-- Achievements will be inserted here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Level Up Modal -->
+    <div class="modal" id="levelUpModal">
+      <div class="modal-content level-up-content">
+        <h2>⚡ LEVEL UP! ⚡</h2>
+        <div class="level-up-display">
+          <span class="level-number" id="levelUpNumber">2</span>
+        </div>
+        <p id="levelUpMessage">You've grown as a reader!</p>
+        <div class="level-up-rewards" id="levelUpRewards"></div>
+        <button class="btn btn-primary" id="closeLevelUpBtn">Continue Quest</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

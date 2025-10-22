@@ -1,0 +1,753 @@
+{
+  "startingPoint": "the-hobbit",
+  "books": {
+    "the-hobbit": {
+      "id": "the-hobbit",
+      "title": "The Hobbit",
+      "author": "J.R.R. Tolkien",
+      "description": "A perfect book. And if you disagree with me on that this early on, too bad. Stop trying to read. You're bad at it.",
+      "danielQuote": "Were you more enamored by the beauty, world, and lore of it, or just the creative choices?",
+      "questions": [
+        {
+          "text": "What hooked you about The Hobbit?",
+          "options": [
+            {
+              "text": "The dragons, magic, and epic fantasy world!",
+              "nextBook": "wizard-of-earthsea",
+              "direction": "south"
+            },
+            {
+              "text": "Great story, but not so into all the dragon stuff",
+              "nextBook": "golden-compass",
+              "direction": "north"
+            }
+          ]
+        }
+      ],
+      "tags": ["classic", "adventure", "starting-point"]
+    },
+    "wizard-of-earthsea": {
+      "id": "wizard-of-earthsea",
+      "title": "A Wizard of Earthsea",
+      "author": "Ursula K. Le Guin",
+      "description": "A transitional story from classic to modern fantasy with a vastly different taste to epic fantasy worldbuilding.",
+      "danielQuote": "Do you want something darker or did you enjoy the lighter escapism that Wizard of Earthsea's particularly beautiful prose provided?",
+      "questions": [
+        {
+          "text": "How did this hit for you?",
+          "options": [
+            {
+              "text": "Loved the lighter escapism and beautiful prose",
+              "nextBook": "small-gods"
+            },
+            {
+              "text": "Good, but I want something darker",
+              "nextBook": "dragonbone-chair"
+            }
+          ]
+        }
+      ],
+      "tags": ["classic", "epic-fantasy", "coming-of-age"]
+    },
+    "small-gods": {
+      "id": "small-gods",
+      "title": "Small Gods",
+      "author": "Terry Pratchett",
+      "description": "Terry Pratchett takes the piss out of religion. Not in an offensive way. The man is very respectful, but there is a satirization in organized religions as a whole.",
+      "danielQuote": "Comedy in fantasy can be pretty divisive. Some really like the absurdist opportunities that the fantastic will provide. While others would rather stay well more grounded.",
+      "questions": [
+        {
+          "text": "How do you feel about the comedy?",
+          "options": [
+            {
+              "text": "Love the absurdist humor! More please!",
+              "nextBook": "narnia"
+            },
+            {
+              "text": "Interesting but not my vibe, I want more epic",
+              "nextBook": "mistborn"
+            }
+          ]
+        }
+      ],
+      "tags": ["comedy", "satire", "discworld"]
+    },
+    "narnia": {
+      "id": "narnia",
+      "title": "The Lion, the Witch and the Wardrobe",
+      "author": "C.S. Lewis",
+      "description": "A classic that verges into cozy territory, though it treats its audience maturely.",
+      "questions": [
+        {
+          "text": "What spoke to you about Narnia?",
+          "options": [
+            {
+              "text": "I want even COZIER fantasy",
+              "nextBook": "legends-and-lattes"
+            },
+            {
+              "text": "Liked it, but not the coziness - the mature YA elements!",
+              "nextBook": "old-kingdom"
+            },
+            {
+              "text": "This is too light, I need something more substantial",
+              "nextBook": "mistborn"
+            }
+          ]
+        }
+      ],
+      "tags": ["classic", "cozy", "ya", "christian-allegory"]
+    },
+    "legends-and-lattes": {
+      "id": "legends-and-lattes",
+      "title": "Legends & Lattes",
+      "author": "Travis Baldree",
+      "description": "The flagship for the cozy genre - an orc opening a coffee shop, struggling with the day-to-day business of small city life.",
+      "danielQuote": "It is the ultimate 'sip a cup of tea, wrap yourself in a blanket' fantasy book.",
+      "questions": [
+        {
+          "text": "Still want cozier?",
+          "options": [
+            {
+              "text": "YES! MORE COZY!",
+              "nextBook": "house-cerulean-sea"
+            },
+            {
+              "text": "This is perfect!",
+              "result": "cozy-fantasy-fan"
+            }
+          ]
+        }
+      ],
+      "tags": ["cozy", "slice-of-life", "romance", "low-stakes"]
+    },
+    "house-cerulean-sea": {
+      "id": "house-cerulean-sea",
+      "title": "The House in the Cerulean Sea",
+      "author": "TJ Klune",
+      "description": "Follows a LGBTQ+ protagonist as he explores a magical orphanage with mysterious children and a town that can't quite accept the other and different.",
+      "danielQuote": "If you somehow want to go even cozier than that, I recommend you buy a blanket and start just reading the threads because we have already found your specific subgenre niche.",
+      "result": "cozy-fantasy-fan",
+      "tags": ["cozy", "lgbtq", "heartwarming", "found-family"]
+    },
+    "mistborn": {
+      "id": "mistborn",
+      "title": "Mistborn: The Final Empire",
+      "author": "Brandon Sanderson",
+      "description": "What if Sauron won? A mist-born orphan and a stabby Gandalf-subversion try to overthrow the evil overlord who actually succeeded in conquering the world.",
+      "danielQuote": "This is a true nexus point. We are going to lose a lot of readers here because many will go 'That guy tickled my itch' and disappear into the Cosmere. Your family is going to miss you.",
+      "questions": [
+        {
+          "text": "What hooked you about Mistborn?",
+          "options": [
+            {
+              "text": "The HARD MAGIC SYSTEM! I need harder!",
+              "nextBook": "shadow-what-was-lost"
+            },
+            {
+              "text": "Everything! Give me more Cosmere!",
+              "result": "cosmere-addict"
+            },
+            {
+              "text": "Great, but not challenging enough",
+              "nextBook": "elric-melnibone"
+            }
+          ]
+        }
+      ],
+      "tags": ["modern-fantasy", "hard-magic", "epic", "heist"]
+    },
+    "shadow-what-was-lost": {
+      "id": "shadow-what-was-lost",
+      "title": "The Shadow of What Was Lost",
+      "author": "James Islington",
+      "description": "Slow burn hard magic system that'll creep up throughout the pages until you go 'Damn, this is hard.'",
+      "questions": [
+        {
+          "text": "Still want harder magic?",
+          "options": [
+            {
+              "text": "My wand needs to be MORE erect!",
+              "nextBook": "black-prism"
+            },
+            {
+              "text": "This is perfect",
+              "result": "hard-magic-fan"
+            }
+          ]
+        }
+      ],
+      "tags": ["hard-magic", "epic-fantasy", "slow-burn"]
+    },
+    "black-prism": {
+      "id": "black-prism",
+      "title": "The Black Prism",
+      "author": "Brent Weeks",
+      "description": "The most fun, flamboyant magic system - color drafting! Different colors provide different projections. Use too much and you'll break the color in your eye and lose yourself to the crazies.",
+      "danielQuote": "If you read this and think 'My wand is not even throbbing yet,' congratulations, you're a hard magic fan. I'm happy for you.",
+      "result": "hard-magic-fan",
+      "tags": ["hard-magic", "color-magic", "epic-fantasy"]
+    },
+    "dragonbone-chair": {
+      "id": "dragonbone-chair",
+      "title": "The Dragonbone Chair",
+      "author": "Tad Williams",
+      "description": "An absolute sleeper slowburn staple - truly epic scale fantasy that is darker in tone without being just boiling in death. A lowly kitchen boy as the realm descends into civil war.",
+      "questions": [
+        {
+          "text": "How dark do you want to go?",
+          "options": [
+            {
+              "text": "This transitional modern-classic vibe is perfect!",
+              "nextBook": "eye-of-the-world"
+            },
+            {
+              "text": "DARKER. I want nail-biting tension!",
+              "nextBook": "game-of-thrones"
+            }
+          ]
+        }
+      ],
+      "tags": ["epic-fantasy", "slow-burn", "dark", "coming-of-age"]
+    },
+    "eye-of-the-world": {
+      "id": "eye-of-the-world",
+      "title": "The Eye of the World",
+      "author": "Robert Jordan",
+      "description": "The higher, nicer writing of classic fantasy with more relatable human characters of modern fantasy.",
+      "danielQuote": "If this is spot on to scratching your itch, you're just going to continue reading The Wheel of Time. And once you finish, you're going to have a hollowness in your chest that you can never fill.",
+      "result": "wheel-of-time-addict",
+      "tags": ["epic-fantasy", "classic-modern-blend", "chosen-one"]
+    },
+    "game-of-thrones": {
+      "id": "game-of-thrones",
+      "title": "A Game of Thrones",
+      "author": "George R.R. Martin",
+      "description": "We all know the story of Westeros. Political intrigue, gray morality, and characters you love dying horribly.",
+      "questions": [
+        {
+          "text": "What's your take?",
+          "options": [
+            {
+              "text": "Love it! But less magic, more politics",
+              "nextBook": "blade-itself"
+            },
+            {
+              "text": "I NEED DARKER",
+              "nextBook": "black-company"
+            },
+            {
+              "text": "This dark level is perfect, but I want higher fantasy",
+              "nextBook": "elric-melnibone"
+            },
+            {
+              "text": "The sexy stuff... I enjoyed that",
+              "nextBook": "kushiels-dart"
+            }
+          ]
+        }
+      ],
+      "tags": ["grimdark", "political", "epic-fantasy", "gray-morality"]
+    },
+    "blade-itself": {
+      "id": "blade-itself",
+      "title": "The Blade Itself",
+      "author": "Joe Abercrombie",
+      "description": "Grimdark fantasy with most of the magic pulled out. Political intrigue with a slight fantasy backdrop and twisted tropes - one protagonist is a torturer and you'll love him.",
+      "danielQuote": "Jobie makes you love horrible people. It's a knack he has. It sounds psychotic to say until you read the book.",
+      "result": "grimdark-fan",
+      "tags": ["grimdark", "political", "low-magic", "character-driven"]
+    },
+    "black-company": {
+      "id": "black-company",
+      "title": "The Black Company",
+      "author": "Glen Cook",
+      "description": "The darkest fantasy book Daniel has ever read. A mercenary band hired by evil people doing what mercenary bands would realistically do.",
+      "danielQuote": "I can't go more deep than that without getting demonetized on YouTube. That's too far for me, dog.",
+      "questions": [
+        {
+          "text": "How do you feel?",
+          "options": [
+            {
+              "text": "This is perfect darkness!",
+              "result": "grimdark-fan"
+            },
+            {
+              "text": "DARKER",
+              "nextBook": "berserk"
+            }
+          ]
+        }
+      ],
+      "tags": ["grimdark", "military", "dark", "mercenaries"]
+    },
+    "berserk": {
+      "id": "berserk",
+      "title": "Berserk",
+      "author": "Kentaro Miura",
+      "description": "A manga about Guts, someone deeply traumatized who spends a long time trying to realize that joy can still be felt maybe kind of for a day.",
+      "danielQuote": "If you want darker than Black Company, one: go to therapy. And two: congratulations, you found your niche. It is grimdark.",
+      "result": "grimdark-fan-seek-therapy",
+      "tags": ["grimdark", "manga", "dark-fantasy", "trauma"]
+    },
+    "kushiels-dart": {
+      "id": "kushiels-dart",
+      "title": "Kushiel's Dart",
+      "author": "Jacqueline Carey",
+      "description": "The grand papa/mama of romantasy. It treats sex like a magic system and is a well worth reading fantasy epic on its own.",
+      "danielQuote": "Few trigger warnings are in there for sure. Look them up on your own.",
+      "result": "romantasy-fan",
+      "tags": ["romantasy", "erotic", "epic-fantasy", "political"]
+    },
+    "elric-melnibone": {
+      "id": "elric-melnibone",
+      "title": "Elric of Melniboné",
+      "author": "Michael Moorcock",
+      "description": "Our Australian boy! Higher epic fantasy with a deeply psychological focus on what it means to be someone with incredible power and moral failings. You have curses, dark destiny, and a sword that soul steals.",
+      "danielQuote": "When I heard the audiobook narrator say 'Elric of Melniboné', how was I that wrong? I really think this is a special book.",
+      "questions": [
+        {
+          "text": "What's your vibe?",
+          "options": [
+            {
+              "text": "Perfect! Want more modern epic like this",
+              "nextBook": "will-of-many"
+            },
+            {
+              "text": "I want HIGHER fantasy",
+              "nextBook": "gardens-of-moon"
+            }
+          ]
+        }
+      ],
+      "tags": ["epic-fantasy", "dark", "psychological", "sword-and-sorcery"]
+    },
+    "gardens-of-moon": {
+      "id": "gardens-of-moon",
+      "title": "Gardens of the Moon",
+      "author": "Steven Erikson",
+      "description": "The biggest step a fantasy fan can take. Don't worry, you will be confused. Eventually, you'll love it. It's not a story of a person or nation - it's the story of EVERYTHING.",
+      "danielQuote": "I am so proud of you for even being willing to take this journey.",
+      "questions": [
+        {
+          "text": "How confused are you?",
+          "options": [
+            {
+              "text": "Perfectly confused and loving it!",
+              "result": "dark-epic-fan"
+            },
+            {
+              "text": "Somehow I need HIGHER",
+              "result": "dark-epic-fan-maximum"
+            }
+          ]
+        }
+      ],
+      "tags": ["epic-fantasy", "complex", "military", "philosophical"]
+    },
+    "golden-compass": {
+      "id": "golden-compass",
+      "title": "The Golden Compass",
+      "author": "Philip Pullman",
+      "description": "A litmus test for urban fantasy. Full of commentary in an alternative closeworld setting with real world elements. Lyra and her daemon investigate mysteries involving her lineage, Dust, and other worlds while witches exist.",
+      "questions": [
+        {
+          "text": "What intrigued you?",
+          "options": [
+            {
+              "text": "I want even MORE real-world settings!",
+              "nextBook": "magicians"
+            },
+            {
+              "text": "The commentary! I want more adult commentary",
+              "nextBook": "perdido-street-station"
+            },
+            {
+              "text": "The Oxford academia setting!",
+              "nextBook": "ninth-house"
+            },
+            {
+              "text": "The YA fairy tale elements",
+              "nextBook": "old-kingdom"
+            }
+          ]
+        }
+      ],
+      "tags": ["urban-fantasy", "ya", "philosophical", "parallel-worlds"]
+    },
+    "magicians": {
+      "id": "magicians",
+      "title": "The Magicians",
+      "author": "Lev Grossman",
+      "description": "Academic setting in the real world where a boy learns magic in school. Definitely some 'I don't like society, I'm a special boy' vibes done well.",
+      "questions": [
+        {
+          "text": "Want more real-world fantasy?",
+          "options": [
+            {
+              "text": "Yes! Epic urban fantasy!",
+              "nextBook": "dresden-files"
+            },
+            {
+              "text": "Perfect level!",
+              "result": "urban-fantasy-fan"
+            }
+          ]
+        }
+      ],
+      "tags": ["urban-fantasy", "academic", "contemporary", "dark"]
+    },
+    "dresden-files": {
+      "id": "dresden-files",
+      "title": "Storm Front (The Dresden Files)",
+      "author": "Jim Butcher",
+      "description": "Real-world epic urban fantasy. Fair warning: it's hornier.",
+      "danielQuote": "And from Kayla: you should eventually read Anita Blake and after book six be disappointed because it's important that you learn fantasy authors will eventually disappoint you.",
+      "result": "urban-fantasy-fan",
+      "tags": ["urban-fantasy", "detective", "magic", "contemporary"]
+    },
+    "perdido-street-station": {
+      "id": "perdido-street-station",
+      "title": "Perdido Street Station",
+      "author": "China Miéville",
+      "description": "The most controversial recommendation! New Weird - people having relationships with bug people. Covers energy crisis, crime, prejudice in bizarre ways.",
+      "danielQuote": "Listen, listen. There's good logic behind this. It is a wonderful filter.",
+      "questions": [
+        {
+          "text": "Your reaction?",
+          "options": [
+            {
+              "text": "I LOVE this weird stuff!",
+              "result": "new-weird-fan"
+            },
+            {
+              "text": "Eh, but I liked the sci-fantasy angle",
+              "result": "sci-fantasy-fan"
+            },
+            {
+              "text": "What the f***",
+              "nextBook": "green-bone-saga"
+            }
+          ]
+        }
+      ],
+      "tags": ["new-weird", "weird-fiction", "steampunk", "dark"]
+    },
+    "ninth-house": {
+      "id": "ninth-house",
+      "title": "Ninth House",
+      "author": "Leigh Bardugo",
+      "description": "Dark academia mystery - a young investigative woman looks into dark underground societies within an academic setting. Surprisingly dark.",
+      "danielQuote": "This is actually my favorite story of hers. I like it more than Shadow and Bone.",
+      "questions": [
+        {
+          "text": "Your take?",
+          "options": [
+            {
+              "text": "Love it! But from a horny male perspective",
+              "nextBook": "dresden-files"
+            },
+            {
+              "text": "Want to test my dark academia tastes more",
+              "nextBook": "deadly-education"
+            }
+          ]
+        }
+      ],
+      "tags": ["dark-academia", "urban-fantasy", "mystery", "contemporary"]
+    },
+    "deadly-education": {
+      "id": "deadly-education",
+      "title": "A Deadly Education",
+      "author": "Naomi Novik",
+      "description": "Dark academia with romance elements. A gateway to see if you like romance in your fantasy.",
+      "questions": [
+        {
+          "text": "What worked for you?",
+          "options": [
+            {
+              "text": "The romance angle!",
+              "nextBook": "magic-bites"
+            },
+            {
+              "text": "The academia itself!",
+              "result": "dark-academia-fan"
+            }
+          ]
+        }
+      ],
+      "tags": ["dark-academia", "romance", "ya", "magic-school"]
+    },
+    "magic-bites": {
+      "id": "magic-bites",
+      "title": "Magic Bites",
+      "author": "Ilona Andrews",
+      "description": "Urban romantasy that gets your wand throbbing.",
+      "result": "urban-romantasy-fan",
+      "tags": ["urban-fantasy", "romance", "paranormal", "action"]
+    },
+    "old-kingdom": {
+      "id": "old-kingdom",
+      "title": "Sabriel (Old Kingdom)",
+      "author": "Garth Nix",
+      "description": "YA that treats its audience maturely. Two lands divided by a wall - one of tech, one of magic. Sabriel's magic deals in death, handling themes of mortality and duty.",
+      "danielQuote": "I think this is one of the best, if not the best YA epics ever.",
+      "questions": [
+        {
+          "text": "What appealed to you?",
+          "options": [
+            {
+              "text": "The YA angle",
+              "nextBook": "six-of-crows"
+            },
+            {
+              "text": "The fairy tale surreal elements",
+              "nextBook": "last-unicorn"
+            }
+          ]
+        }
+      ],
+      "tags": ["ya", "dark", "necromancy", "coming-of-age"]
+    },
+    "six-of-crows": {
+      "id": "six-of-crows",
+      "title": "Six of Crows",
+      "author": "Leigh Bardugo",
+      "description": "YA with interesting worldbuilding based in Russian lore and mythos.",
+      "questions": [
+        {
+          "text": "Want more YA?",
+          "options": [
+            {
+              "text": "Yes, but more high fantasy!",
+              "nextBook": "eragon"
+            },
+            {
+              "text": "This is perfect!",
+              "result": "ya-fantasy-fan"
+            }
+          ]
+        }
+      ],
+      "tags": ["ya", "heist", "grishaverse", "ensemble-cast"]
+    },
+    "eragon": {
+      "id": "eragon",
+      "title": "Eragon",
+      "author": "Christopher Paolini",
+      "description": "If you're over 25, let's be honest, you've read that.",
+      "result": "ya-fantasy-fan",
+      "tags": ["ya", "dragons", "high-fantasy", "coming-of-age"]
+    },
+    "last-unicorn": {
+      "id": "last-unicorn",
+      "title": "The Last Unicorn",
+      "author": "Peter S. Beagle",
+      "description": "Fairy tale fantasy with surreal elements and animal companions.",
+      "result": "fairy-tale-fan",
+      "tags": ["fairy-tale", "classic", "melancholic", "fantasy"]
+    },
+    "will-of-many": {
+      "id": "will-of-many",
+      "title": "The Will of the Many",
+      "author": "James Islington",
+      "description": "Modern epic based on classical culture. Non-medieval fantasy where you can trust nobody, everybody's a suspect.",
+      "questions": [
+        {
+          "text": "Your vibe?",
+          "options": [
+            {
+              "text": "Love the modern stylization + epic!",
+              "result": "modern-fantasy-fan"
+            }
+          ]
+        }
+      ],
+      "tags": ["modern-fantasy", "epic", "roman-inspired", "mystery"]
+    },
+    "green-bone-saga": {
+      "id": "green-bone-saga",
+      "title": "Jade City (Green Bone Saga)",
+      "author": "Fonda Lee",
+      "description": "The best urban fantasy epic ever. Reservoir Dogs meets Godfather meets Kill Bill. Corruption arcs, characters making horrendous decisions, generational change, and why family tears us apart.",
+      "danielQuote": "You will see characters make horrendous decisions and love them for it while your heart breaks from their actions.",
+      "questions": [
+        {
+          "text": "What's your take?",
+          "options": [
+            {
+              "text": "Perfect epic level!",
+              "result": "urban-epic-fan"
+            },
+            {
+              "text": "A bit less epic, but keep urban fantasy",
+              "nextBook": "divine-rivals"
+            },
+            {
+              "text": "Same epic scale but DARKER",
+              "nextBook": "dark-tower"
+            }
+          ]
+        }
+      ],
+      "tags": ["urban-fantasy", "epic", "asian-inspired", "crime-family"]
+    },
+    "divine-rivals": {
+      "id": "divine-rivals",
+      "title": "Divine Rivals",
+      "author": "Rebecca Ross",
+      "description": "Two people communicate through magical typewriters while there's mythos around gods in a WWI-ish setting. Has romance angle.",
+      "questions": [
+        {
+          "text": "What worked?",
+          "options": [
+            {
+              "text": "The romance!",
+              "result": "urban-romance-fan"
+            },
+            {
+              "text": "The alternative setting!",
+              "nextBook": "middlegame"
+            }
+          ]
+        }
+      ],
+      "tags": ["romance", "historical", "epistolary", "gods"]
+    },
+    "middlegame": {
+      "id": "middlegame",
+      "title": "Middlegame",
+      "author": "Seanan McGuire",
+      "description": "Alternative fantasy with complex time-bending narrative.",
+      "result": "alt-fantasy-fan",
+      "tags": ["alt-fantasy", "time-travel", "alchemy", "complex"]
+    },
+    "dark-tower": {
+      "id": "dark-tower",
+      "title": "The Gunslinger (Dark Tower)",
+      "author": "Stephen King",
+      "description": "Dark epic urban fantasy with one of the best opening lines ever. The gunslinger jumps through worlds and Stephen King stories hunting the man in black. Controversial for its ending.",
+      "questions": [
+        {
+          "text": "How dark?",
+          "options": [
+            {
+              "text": "Less epic but want the horror!",
+              "nextBook": "pet-sematary"
+            },
+            {
+              "text": "This is perfect darkness!",
+              "result": "urban-epic-fan"
+            }
+          ]
+        }
+      ],
+      "tags": ["dark-fantasy", "western", "multiverse", "horror"]
+    },
+    "pet-sematary": {
+      "id": "pet-sematary",
+      "title": "Pet Sematary",
+      "author": "Stephen King",
+      "description": "The author's a horror writer, so here you go. Spooky vibes.",
+      "questions": [
+        {
+          "text": "Too much?",
+          "options": [
+            {
+              "text": "EVEN MORE HORRIFIC!",
+              "result": "fantasy-horror-fan"
+            },
+            {
+              "text": "Too much, want dark but less horror",
+              "nextBook": "gideon-ninth"
+            }
+          ]
+        }
+      ],
+      "tags": ["horror", "dark", "supernatural", "tragedy"]
+    },
+    "gideon-ninth": {
+      "id": "gideon-ninth",
+      "title": "Gideon the Ninth",
+      "author": "Tamsyn Muir",
+      "description": "Lesbian necromancers in space. Dark but with humor. Good for alt fantasy fans too.",
+      "danielQuote": "If after all these recommendations you still didn't even like Gideon the Ninth, I'm sorry. I cannot help you anymore.",
+      "result": "found-your-niche",
+      "tags": ["sci-fantasy", "lgbtq", "necromancy", "humor"]
+    }
+  },
+  "results": {
+    "cozy-fantasy-fan": {
+      "title": "Cozy Fantasy Fan",
+      "description": "You've found your niche! You want to sip tea, wrap yourself in a blanket, and read about orcs opening coffee shops.",
+      "recommendations": ["Legends & Lattes", "The House in the Cerulean Sea", "A Psalm for the Wild-Built"],
+      "danielQuote": "If you want cozier than House in the Cerulean Sea, I recommend you buy a blanket and start just reading the threads."
+    },
+    "hard-magic-fan": {
+      "title": "Hard Magic System Fan",
+      "description": "You little freak. Your wand is throbbing for those detailed, intricate magic systems.",
+      "recommendations": ["Mistborn series", "The Black Prism", "Shadow of What Was Lost", "The Name of the Wind"],
+      "danielQuote": "If you read Black Prism and think 'My wand is not even throbbing yet,' then I'm just going to say you're a hard magic fan and good, I'm happy for you."
+    },
+    "grimdark-fan": {
+      "title": "Grimdark Fan",
+      "description": "You want humanity questioning whether it should be saved. Nail-biting, dark, morally gray excellence.",
+      "recommendations": ["The First Law trilogy", "The Black Company", "A Song of Ice and Fire"],
+      "danielQuote": "If you read Black Company and think 'This is perfect,' congratulations. You found your niche."
+    },
+    "grimdark-fan-seek-therapy": {
+      "title": "Maximum Grimdark Fan",
+      "description": "If you want darker than Black Company: One, go to therapy. Two, congratulations, you found your niche.",
+      "recommendations": ["Berserk", "The Black Company", "The Second Apocalypse"],
+      "danielQuote": "That's too far for me, dog. But if you read Berserk and want darker, go to therapy."
+    },
+    "urban-fantasy-fan": {
+      "title": "Urban Fantasy Fan",
+      "description": "Magic in the modern world! Cities with secret supernatural societies!",
+      "recommendations": ["The Dresden Files", "The Magicians", "Kate Daniels series"],
+      "danielQuote": "Congratulations. You just like urban fantasy."
+    },
+    "dark-epic-fan": {
+      "title": "Dark Epic Fantasy Fan",
+      "description": "You want the darkness AND the massive scope. You're reading stories of continents, not just chosen ones.",
+      "recommendations": ["Malazan Book of the Fallen", "The Dandelion Dynasty", "Empire of the Vampire"],
+      "danielQuote": "I am so proud of you for even being willing to take this journey with Malazan."
+    },
+    "ya-fantasy-fan": {
+      "title": "YA Fantasy Fan",
+      "description": "You have the curse of endless choices. More fantasy books are published in this space than any other. You're never going to catch up. Sorry.",
+      "recommendations": ["Six of Crows", "The Old Kingdom", "Eragon", "Shadow and Bone"],
+      "danielQuote": "You're suffering from success. Sorry."
+    },
+    "romantasy-fan": {
+      "title": "Romantasy Fan",
+      "description": "Sex and magic and epic storylines! No judgment here, that's absolutely fine.",
+      "recommendations": ["Kushiel's Dart", "A Court of Thorns and Roses", "From Blood and Ash"],
+      "danielQuote": "Few trigger warnings are in there for sure. Look them up on your own."
+    },
+    "modern-fantasy-fan": {
+      "title": "Modern Fantasy Fan",
+      "description": "You love the contemporary stylings of fantasy while keeping the epic scope.",
+      "recommendations": ["The Will of the Many", "Mistborn", "Orconomics"],
+      "danielQuote": "Jack the box. You're a modern fantasy fan."
+    },
+    "new-weird-fan": {
+      "title": "New Weird Fan",
+      "description": "Bug people relationships! Energy crisis commentary! You're Daniel's favorite type of freak.",
+      "recommendations": ["Perdido Street Station", "The City & The City", "Annihilation"],
+      "danielQuote": "Get your freak on. Don't let nobody stop you."
+    },
+    "cosmere-addict": {
+      "title": "Cosmere Addict",
+      "description": "See you in 6 months when you're ready to take a break. Your family is going to miss you.",
+      "recommendations": ["All of Brandon Sanderson's Cosmere"],
+      "danielQuote": "We are going to lose a lot of readers here because many will go 'That guy tickled my itch' and disappear into the Cosmere."
+    },
+    "wheel-of-time-addict": {
+      "title": "Wheel of Time Fan",
+      "description": "Once you finish, you're going to have a hollowness in your chest that you can never fill.",
+      "recommendations": ["The Wheel of Time (all 14+ books)", "The Stormlight Archive"],
+      "danielQuote": "If this is spot on to scratching your itch, you're going to have a hollowness in your chest that you can never fill. But that's the end result of finishing any series you love."
+    }
+  }
+}
