@@ -1,10 +1,10 @@
 // ============================================
 // FANTASY READING QUEST - Main Game File
 // A top-down RPG for discovering fantasy books
-// Version: 1.0.2 - Fixed scene key initialization
+// Version: 1.0.3 - Fixed duplicate scene key error
 // ============================================
 
-const GAME_VERSION = '1.0.2';
+const GAME_VERSION = '1.0.3';
 console.log('%c🎮 Fantasy Reading Quest v' + GAME_VERSION, 'font-size: 20px; font-weight: bold; color: #6b46c1; background: #d4af37; padding: 10px;');
 console.log('%cGame engine loaded successfully! Classes initialized in correct order.', 'color: #22c55e; font-weight: bold;');
 console.log('Repository: https://github.com/colindacity/fantasy-journey');
@@ -534,12 +534,12 @@ class MainWorldScene extends Phaser.Scene {
 }
 
 // ============================================
-// LIBRARY SCENE
+// BASE INDOOR SCENE (Reusable base class)
 // ============================================
 
-class LibraryScene extends Phaser.Scene {
-  constructor() {
-    super({ key: 'LibraryScene' });
+class BaseIndoorScene extends Phaser.Scene {
+  constructor(config) {
+    super(config);
   }
 
   create() {
@@ -780,10 +780,25 @@ class LibraryScene extends Phaser.Scene {
 }
 
 // ============================================
-// PLACEHOLDER SCENES (to be expanded)
+// LIBRARY SCENE (Actual scene instance)
 // ============================================
 
-class BookstoreScene extends LibraryScene {
+class LibraryScene extends BaseIndoorScene {
+  constructor() {
+    super({ key: 'LibraryScene' });
+  }
+
+  create() {
+    super.create();
+    this.updateLocationLabel('Ancient Library - Explore Thousands of Fantasy Books');
+  }
+}
+
+// ============================================
+// OTHER INDOOR SCENES
+// ============================================
+
+class BookstoreScene extends BaseIndoorScene {
   constructor() {
     super({ key: 'BookstoreScene' });
   }
@@ -794,7 +809,7 @@ class BookstoreScene extends LibraryScene {
   }
 }
 
-class AuthorLandScene extends LibraryScene {
+class AuthorLandScene extends BaseIndoorScene {
   constructor() {
     super({ key: 'AuthorLandScene' });
   }
@@ -805,7 +820,7 @@ class AuthorLandScene extends LibraryScene {
   }
 }
 
-class WritersWorkshopScene extends LibraryScene {
+class WritersWorkshopScene extends BaseIndoorScene {
   constructor() {
     super({ key: 'WritersWorkshopScene' });
   }
@@ -816,7 +831,7 @@ class WritersWorkshopScene extends LibraryScene {
   }
 }
 
-class PlayerHomeScene extends LibraryScene {
+class PlayerHomeScene extends BaseIndoorScene {
   constructor() {
     super({ key: 'PlayerHomeScene' });
   }

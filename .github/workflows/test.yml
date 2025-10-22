@@ -1,0 +1,87 @@
+name: Automated Tests
+
+on:
+  push:
+    branches:
+      - claude/fantasy-reading-guide-app-011CUNz6bVDgyZL4Jz8RjbvW
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  test:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: tests/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ./tests
+        run: npm ci || npm install
+
+      - name: Install Playwright browsers
+        working-directory: ./tests
+        run: npx playwright install --with-deps
+
+      - name: Run Playwright tests
+        working-directory: ./tests
+        run: npm test
+        env:
+          BASE_URL: http://localhost:8000
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: tests/playwright-report/
+          retention-days: 30
+
+      - name: Upload test screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-screenshots
+          path: tests/test-results/
+          retention-days: 30
+
+      - name: Comment PR with test results
+        if: github.event_name == 'pull_request' && always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const resultsPath = 'tests/test-results/results.json';
+
+            if (fs.existsSync(resultsPath)) {
+              const results = JSON.parse(fs.readFileSync(resultsPath, 'utf8'));
+              const { stats } = results;
+
+              const body = `## 🎮 Test Results
+
+              - ✅ Passed: ${stats.expected}
+              - ❌ Failed: ${stats.unexpected}
+              - ⏭️ Skipped: ${stats.skipped}
+              - ⏱️ Duration: ${(stats.duration / 1000).toFixed(2)}s
+
+              ${stats.unexpected > 0 ? '⚠️ Some tests failed! Check the artifacts for details.' : '🎉 All tests passed!'}
+              `;
+
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.name,
+                body: body
+              });
+            }

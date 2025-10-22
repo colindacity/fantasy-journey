@@ -1,0 +1,15 @@
+{
+  "name": "fantasy-reading-guide-tests",
+  "version": "1.0.0",
+  "description": "Automated tests for Fantasy Reading Quest RPG",
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "test:headed": "playwright test --headed",
+    "test:report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0"
+  }
+}
