@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Fantasy Reading Quest - Interactive RPG</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #1a1a2e;
+      overflow: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+    }
+
+    #game-container {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    }
+
+    canvas {
+      display: block;
+      border-radius: 8px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Loading Screen */
+    #loading {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      color: white;
+      transition: opacity 0.5s;
+    }
+
+    #loading.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .loading-content {
+      text-align: center;
+    }
+
+    .loading-title {
+      font-size: 3rem;
+      font-weight: bold;
+      background: linear-gradient(135deg, #6b46c1, #d4af37);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 2rem;
+    }
+
+    .loading-bar {
+      width: 300px;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 0 auto;
+    }
+
+    .loading-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #6b46c1, #d4af37);
+      width: 0%;
+      transition: width 0.3s ease;
+      animation: shimmer 1.5s infinite;
+    }
+
+    @keyframes shimmer {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    .loading-text {
+      margin-top: 1rem;
+      color: #d4af37;
+      font-size: 1rem;
+    }
+
+    /* Mobile Controls */
+    #mobile-controls {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      display: none;
+      z-index: 100;
+    }
+
+    #mobile-controls.show {
+      display: block;
+    }
+
+    .joystick {
+      width: 120px;
+      height: 120px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 3px solid rgba(212, 175, 55, 0.5);
+      border-radius: 50%;
+      position: relative;
+      touch-action: none;
+    }
+
+    .joystick-knob {
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, #6b46c1, #d4af37);
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    }
+
+    .action-button {
+      position: fixed;
+      bottom: 80px;
+      right: 160px;
+      width: 70px;
+      height: 70px;
+      background: linear-gradient(135deg, #6b46c1, #d4af37);
+      border: none;
+      border-radius: 50%;
+      color: white;
+      font-size: 1.5rem;
+      font-weight: bold;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+      cursor: pointer;
+      display: none;
+      touch-action: none;
+    }
+
+    .action-button.show {
+      display: block;
+    }
+
+    .action-button:active {
+      transform: scale(0.95);
+    }
+
+    /* UI Overlay */
+    #ui-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 50;
+    }
+
+    .location-label {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      padding: 12px 24px;
+      border-radius: 8px;
+      color: #d4af37;
+      font-weight: bold;
+      font-size: 1.2rem;
+      border: 2px solid rgba(212, 175, 55, 0.5);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .location-label.show {
+      opacity: 1;
+    }
+
+    /* Mini Map */
+    .mini-map {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 150px;
+      height: 150px;
+      background: rgba(0, 0, 0, 0.8);
+      border: 2px solid rgba(212, 175, 55, 0.5);
+      border-radius: 8px;
+      padding: 8px;
+    }
+
+    /* Book Shelf Counter */
+    .bookshelf-counter {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      padding: 12px 20px;
+      border-radius: 8px;
+      color: white;
+      border: 2px solid rgba(212, 175, 55, 0.5);
+    }
+
+    .bookshelf-counter-title {
+      font-size: 0.8rem;
+      color: #d4af37;
+      margin-bottom: 4px;
+    }
+
+    .bookshelf-counter-value {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    /* Mobile optimization */
+    @media (max-width: 768px) {
+      .loading-title {
+        font-size: 2rem;
+      }
+
+      .loading-bar {
+        width: 250px;
+      }
+
+      .mini-map {
+        width: 100px;
+        height: 100px;
+        top: 10px;
+        right: 10px;
+      }
+
+      .bookshelf-counter {
+        top: 10px;
+        left: 10px;
+        padding: 8px 12px;
+      }
+
+      .bookshelf-counter-value {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Loading Screen -->
+  <div id="loading">
+    <div class="loading-content">
+      <div class="loading-title">⚔️ Fantasy Reading Quest ⚔️</div>
+      <div class="loading-bar">
+        <div class="loading-fill" id="loadingFill"></div>
+      </div>
+      <div class="loading-text" id="loadingText">Loading your adventure...</div>
+    </div>
+  </div>
+
+  <!-- Game Container -->
+  <div id="game-container"></div>
+
+  <!-- UI Overlay -->
+  <div id="ui-overlay">
+    <div class="location-label" id="locationLabel"></div>
+    <div class="bookshelf-counter">
+      <div class="bookshelf-counter-title">📚 Your Library</div>
+      <div class="bookshelf-counter-value" id="bookCount">0</div>
+    </div>
+  </div>
+
+  <!-- Mobile Controls -->
+  <div id="mobile-controls">
+    <div class="joystick" id="joystick">
+      <div class="joystick-knob" id="joystickKnob"></div>
+    </div>
+  </div>
+  <button class="action-button" id="actionButton">A</button>
+
+  <!-- Phaser 3 -->
+  <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
+
+  <!-- Game Scripts -->
+  <script src="game.js"></script>
+</body>
+</html>
