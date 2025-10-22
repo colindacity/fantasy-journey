@@ -1,6 +1,7 @@
 // ============================================
 // FANTASY READING QUEST - Main Game File
 // A top-down RPG for discovering fantasy books
+// Version: 1.0.1 - Fixed class initialization
 // ============================================
 
 // Game State
