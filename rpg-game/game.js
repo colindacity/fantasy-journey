@@ -1,14 +1,12 @@
 // ============================================
-// FANTASY READING QUEST - Main Game File
-// A top-down RPG for discovering fantasy books
-// Version: 1.0.3 - Fixed duplicate scene key error
+// FANTASY READING QUEST - Modern 2025 Edition
+// Professional mobile RPG with modern graphics
+// Version: 2.0.0 - Complete visual overhaul
 // ============================================
 
-const GAME_VERSION = '1.0.3';
-console.log('%c🎮 Fantasy Reading Quest v' + GAME_VERSION, 'font-size: 20px; font-weight: bold; color: #6b46c1; background: #d4af37; padding: 10px;');
-console.log('%cGame engine loaded successfully! Classes initialized in correct order.', 'color: #22c55e; font-weight: bold;');
-console.log('Repository: https://github.com/colindacity/fantasy-journey');
-console.log('Build time:', new Date().toISOString());
+const GAME_VERSION = '2.0.0';
+console.log('%c🎮 Fantasy Reading Quest v' + GAME_VERSION, 'font-size: 24px; font-weight: bold; color: #fff; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 15px; border-radius: 8px;');
+console.log('%c✨ Modern 2025 Edition - Professional Graphics', 'color: #fbbf24; font-weight: bold; font-size: 16px;');
 
 // Game State
 const gameState = {
@@ -24,8 +22,15 @@ const gameState = {
 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
                  ('ontouchstart' in window);
 
+// Asset URLs - Using free Kenney assets via CDN
+const ASSETS = {
+  // Character sprites (we'll generate high-quality ones)
+  PLAYER: 'https://raw.githubusercontent.com/photonstorm/phaser3-examples/master/public/assets/sprites/phaser-dude.png',
+  // We'll use programmatic generation for everything else but make it BEAUTIFUL
+};
+
 // ============================================
-// PRELOAD SCENE
+// PRELOAD SCENE - Load Professional Assets
 // ============================================
 
 class PreloadScene extends Phaser.Scene {
@@ -34,27 +39,91 @@ class PreloadScene extends Phaser.Scene {
   }
 
   preload() {
-    // Update loading bar
+    // Progress bar styling
     this.load.on('progress', (value) => {
-      document.getElementById('loadingFill').style.width = (value * 100) + '%';
-      document.getElementById('loadingText').textContent =
-        `Loading assets... ${Math.floor(value * 100)}%`;
+      const fill = document.getElementById('loadingFill');
+      const text = document.getElementById('loadingText');
+      if (fill) fill.style.width = (value * 100) + '%';
+      if (text) text.textContent = `Loading assets... ${Math.floor(value * 100)}%`;
     });
 
-    // Load placeholder graphics (we'll generate them programmatically)
-    // In production, you'd load sprite sheets and tilemaps here
+    // Load sprite sheets from Kenney or OpenGameArt
+    // For now, using Phaser example assets as placeholders
+    this.load.spritesheet('player',
+      'https://labs.phaser.io/assets/sprites/metalslug_monster39x40.png',
+      { frameWidth: 39, frameHeight: 40 }
+    );
 
-    // For now, we'll use simple colored rectangles and circles
-    this.load.on('complete', () => {
-      console.log('Assets loaded!');
-    });
+    // Load tileset for environment
+    this.load.image('tiles',
+      'https://labs.phaser.io/assets/tilemaps/tiles/catastrophi_tiles_16.png'
+    );
+
+    // Load particle textures
+    this.load.image('particle',
+      'https://labs.phaser.io/assets/particles/white.png'
+    );
+
+    this.load.image('spark',
+      'https://labs.phaser.io/assets/particles/yellow.png'
+    );
+
+    // Create procedural graphics for buildings and environment
+    this.createProceduralAssets();
+  }
+
+  createProceduralAssets() {
+    // We'll create these in the create() method after Phaser is ready
   }
 
   create() {
-    // Hide loading screen
+    // Generate high-quality procedural graphics
+    this.generateModernGraphics();
+
+    // Create player animations
+    this.anims.create({
+      key: 'walk-down',
+      frames: this.anims.generateFrameNumbers('player', { start: 0, end: 3 }),
+      frameRate: 10,
+      repeat: -1
+    });
+
+    this.anims.create({
+      key: 'walk-up',
+      frames: this.anims.generateFrameNumbers('player', { start: 4, end: 7 }),
+      frameRate: 10,
+      repeat: -1
+    });
+
+    this.anims.create({
+      key: 'walk-left',
+      frames: this.anims.generateFrameNumbers('player', { start: 8, end: 11 }),
+      frameRate: 10,
+      repeat: -1
+    });
+
+    this.anims.create({
+      key: 'walk-right',
+      frames: this.anims.generateFrameNumbers('player', { start: 12, end: 15 }),
+      frameRate: 10,
+      repeat: -1
+    });
+
+    this.anims.create({
+      key: 'idle',
+      frames: this.anims.generateFrameNumbers('player', { start: 0, end: 0 }),
+      frameRate: 1
+    });
+
+    // Hide loading screen with smooth fade
     setTimeout(() => {
-      document.getElementById('loading').classList.add('hidden');
-    }, 500);
+      const loading = document.getElementById('loading');
+      if (loading) {
+        loading.style.transition = 'opacity 0.5s ease-out';
+        loading.style.opacity = '0';
+        setTimeout(() => loading.classList.add('hidden'), 500);
+      }
+    }, 300);
 
     // Load saved game
     const saved = localStorage.getItem('fantasy-rpg-save');
@@ -65,10 +134,159 @@ class PreloadScene extends Phaser.Scene {
     // Start main world
     this.scene.start('MainWorldScene');
   }
+
+  generateModernGraphics() {
+    // Generate library building
+    const libraryGraphics = this.add.graphics();
+    libraryGraphics.lineStyle(4, 0x8b5a2b);
+    libraryGraphics.fillStyle(0xa0522d, 1);
+    libraryGraphics.fillRoundedRect(0, 0, 200, 180, 16);
+    libraryGraphics.strokeRoundedRect(0, 0, 200, 180, 16);
+
+    // Add roof
+    libraryGraphics.fillStyle(0x6b3410, 1);
+    libraryGraphics.fillTriangle(0, 20, 100, -20, 200, 20);
+    libraryGraphics.lineStyle(3, 0x4a2408);
+    libraryGraphics.strokeTriangle(0, 20, 100, -20, 200, 20);
+
+    // Add windows
+    libraryGraphics.fillStyle(0xffd700, 0.6);
+    libraryGraphics.fillRoundedRect(20, 40, 50, 60, 8);
+    libraryGraphics.fillRoundedRect(130, 40, 50, 60, 8);
+
+    // Add door
+    libraryGraphics.fillStyle(0x4a2408, 1);
+    libraryGraphics.fillRoundedRect(75, 100, 50, 70, { tl: 8, tr: 8, bl: 0, br: 0 });
+
+    libraryGraphics.generateTexture('library-building', 200, 200);
+    libraryGraphics.destroy();
+
+    // Generate bookstore building
+    const bookstoreGraphics = this.add.graphics();
+    bookstoreGraphics.lineStyle(4, 0x7c3aed);
+    bookstoreGraphics.fillStyle(0x8b5cf6, 1);
+    bookstoreGraphics.fillRoundedRect(0, 0, 200, 180, 16);
+    bookstoreGraphics.strokeRoundedRect(0, 0, 200, 180, 16);
+
+    // Modern flat roof
+    bookstoreGraphics.fillStyle(0x6d28d9, 1);
+    bookstoreGraphics.fillRoundedRect(0, 0, 200, 30, { tl: 16, tr: 16, bl: 0, br: 0 });
+
+    // Large display windows
+    bookstoreGraphics.fillStyle(0xc4b5fd, 0.7);
+    bookstoreGraphics.fillRoundedRect(15, 45, 80, 80, 8);
+    bookstoreGraphics.fillRoundedRect(105, 45, 80, 80, 8);
+
+    // Entrance
+    bookstoreGraphics.fillStyle(0x5b21b6, 1);
+    bookstoreGraphics.fillRoundedRect(60, 130, 80, 50, 8);
+
+    bookstoreGraphics.generateTexture('bookstore-building', 200, 200);
+    bookstoreGraphics.destroy();
+
+    // Generate workshop building (steampunk style)
+    const workshopGraphics = this.add.graphics();
+    workshopGraphics.lineStyle(4, 0xb45309);
+    workshopGraphics.fillStyle(0xd97706, 1);
+    workshopGraphics.fillRoundedRect(0, 0, 200, 180, 16);
+    workshopGraphics.strokeRoundedRect(0, 0, 200, 180, 16);
+
+    // Industrial style roof
+    workshopGraphics.fillStyle(0x78350f, 1);
+    workshopGraphics.fillRect(0, 0, 200, 25);
+
+    // Large windows
+    workshopGraphics.fillStyle(0xfcd34d, 0.6);
+    for (let i = 0; i < 3; i++) {
+      workshopGraphics.fillRoundedRect(15 + i * 60, 40, 45, 50, 6);
+    }
+
+    workshopGraphics.generateTexture('workshop-building', 200, 200);
+    workshopGraphics.destroy();
+
+    // Generate player home (cozy cottage)
+    const homeGraphics = this.add.graphics();
+    homeGraphics.lineStyle(4, 0x65a30d);
+    homeGraphics.fillStyle(0x84cc16, 1);
+    homeGraphics.fillRoundedRect(0, 0, 180, 160, 16);
+    homeGraphics.strokeRoundedRect(0, 0, 180, 160, 16);
+
+    // Thatched roof
+    homeGraphics.fillStyle(0xca8a04, 1);
+    homeGraphics.fillTriangle(0, 25, 90, -15, 180, 25);
+    homeGraphics.lineStyle(3, 0x92400e);
+    homeGraphics.strokeTriangle(0, 25, 90, -15, 180, 25);
+
+    // Chimney
+    homeGraphics.fillStyle(0x7c2d12, 1);
+    homeGraphics.fillRect(130, -10, 20, 35);
+
+    // Round window
+    homeGraphics.fillStyle(0xfef3c7, 0.7);
+    homeGraphics.fillCircle(90, 60, 25);
+
+    // Door
+    homeGraphics.fillStyle(0x7c2d12, 1);
+    homeGraphics.fillRoundedRect(65, 100, 50, 60, { tl: 8, tr: 8, bl: 0, br: 0 });
+
+    homeGraphics.generateTexture('home-building', 180, 180);
+    homeGraphics.destroy();
+
+    // Generate ground textures
+    this.generateGroundTextures();
+  }
+
+  generateGroundTextures() {
+    // Grass texture with variation
+    const grassGraphics = this.add.graphics();
+    grassGraphics.fillStyle(0x22c55e, 1);
+    grassGraphics.fillRect(0, 0, 64, 64);
+
+    // Add texture variation
+    for (let i = 0; i < 20; i++) {
+      const x = Math.random() * 64;
+      const y = Math.random() * 64;
+      const shade = Math.random() > 0.5 ? 0x16a34a : 0x15803d;
+      grassGraphics.fillStyle(shade, 0.3);
+      grassGraphics.fillCircle(x, y, Math.random() * 3 + 1);
+    }
+
+    grassGraphics.generateTexture('grass', 64, 64);
+    grassGraphics.destroy();
+
+    // Stone path texture
+    const stoneGraphics = this.add.graphics();
+    stoneGraphics.fillStyle(0x9ca3af, 1);
+    stoneGraphics.fillRect(0, 0, 64, 64);
+
+    // Add stone pattern
+    stoneGraphics.lineStyle(2, 0x6b7280, 0.5);
+    stoneGraphics.strokeRect(2, 2, 28, 28);
+    stoneGraphics.strokeRect(34, 2, 28, 28);
+    stoneGraphics.strokeRect(2, 34, 28, 28);
+    stoneGraphics.strokeRect(34, 34, 28, 28);
+
+    stoneGraphics.generateTexture('stone', 64, 64);
+    stoneGraphics.destroy();
+
+    // Water texture
+    const waterGraphics = this.add.graphics();
+    waterGraphics.fillStyle(0x3b82f6, 0.6);
+    waterGraphics.fillRect(0, 0, 64, 64);
+
+    // Add shimmer
+    for (let i = 0; i < 10; i++) {
+      waterGraphics.fillStyle(0x60a5fa, 0.4);
+      waterGraphics.fillCircle(Math.random() * 64, Math.random() * 64, Math.random() * 8);
+    }
+
+    waterGraphics.generateTexture('water', 64, 64);
+    waterGraphics.destroy();
+  }
 }
 
 // ============================================
-// MAIN WORLD SCENE - Hub Area
+// MAIN WORLD SCENE - Modern Hub
 // ============================================
 
 class MainWorldScene extends Phaser.Scene {
@@ -78,463 +296,576 @@ class MainWorldScene extends Phaser.Scene {
 
   create() {
     gameState.currentZone = 'main-world';
-    this.updateLocationLabel('Fantasy Reading Quest - Town Square');
+    this.updateLocationLabel('✨ Fantasy Reading Quest - Enchanted Town Square');
 
-    // Create world background
-    this.createWorld();
+    // Create beautiful tiled world
+    this.createModernWorld();
 
-    // Create player
-    this.createPlayer();
+    // Create animated player
+    this.createModernPlayer();
 
-    // Create zones/buildings
-    this.createZones();
+    // Create zones with modern graphics
+    this.createModernZones();
 
-    // Setup camera
-    this.cameras.main.startFollow(this.player, true, 0.1, 0.1);
-    this.cameras.main.setZoom(1);
+    // Add particle effects
+    this.addAmbientParticles();
+
+    // Add dynamic lighting
+    if (this.lights) {
+      this.lights.enable().setAmbientColor(0x808080);
+    }
+
+    // Setup camera with smooth follow
+    this.cameras.main.startFollow(this.player, true, 0.08, 0.08);
+    this.cameras.main.setZoom(isMobile ? 0.8 : 1);
+    this.cameras.main.setBounds(0, 0, 1600, 1200);
 
     // Setup controls
     this.setupControls();
 
-    // Create NPCs
-    this.createNPCs();
+    // Create NPCs with animations
+    this.createModernNPCs();
 
-    // Mobile joystick
+    // Add weather effects
+    this.addWeatherEffects();
+
+    // Setup mobile controls
     if (isMobile) {
       this.setupMobileControls();
     }
 
-    // Update UI
     this.updateBookCount();
   }
 
-  createWorld() {
-    const width = 1600;
-    const height = 1200;
+  createModernWorld() {
+    // Create layered background
+    const bg = this.add.graphics();
 
-    // Ground
-    const ground = this.add.rectangle(width / 2, height / 2, width, height, 0x2d5016);
+    // Sky gradient
+    const gradient = bg.fillGradientStyle(0x87ceeb, 0x87ceeb, 0xe0f2fe, 0xe0f2fe, 1);
+    bg.fillRect(0, 0, 1600, 1200);
 
-    // Paths
-    const pathColor = 0x8b7355;
+    // Create tiled ground
+    for (let x = 0; x < 1600; x += 64) {
+      for (let y = 0; y < 1200; y += 64) {
+        const texture = (x + y) % 192 === 0 ? 'stone' : 'grass';
+        this.add.image(x + 32, y + 32, texture).setAlpha(0.9);
+      }
+    }
 
-    // Main vertical path
-    this.add.rectangle(width / 2, height / 2, 120, height, pathColor);
+    // Add decorative trees and elements
+    for (let i = 0; i < 20; i++) {
+      const x = Math.random() * 1400 + 100;
+      const y = Math.random() * 1000 + 100;
+      this.createTree(x, y);
+    }
 
-    // Horizontal path
-    this.add.rectangle(width / 2, height / 2, width, 120, pathColor);
+    // Add water fountain in center
+    this.createFountain(800, 600);
 
-    // Town square center
-    this.add.circle(width / 2, height / 2, 150, 0xd4af37, 0.3);
-
-    // Add decorative elements
-    this.addTrees();
-    this.addFlowers();
-
-    // World boundaries
-    this.physics.world.setBounds(0, 0, width, height);
+    // World bounds
+    this.physics.world.setBounds(0, 0, 1600, 1200);
   }
 
-  addTrees() {
-    const treePositions = [
-      [200, 200], [300, 250], [400, 180],
-      [1200, 200], [1300, 280], [1100, 150],
-      [200, 900], [350, 1000], [180, 1100],
-      [1200, 950], [1350, 1050], [1150, 900]
-    ];
+  createTree(x, y) {
+    // Tree trunk
+    const trunk = this.add.graphics();
+    trunk.fillStyle(0x8b4513, 1);
+    trunk.fillRect(x - 10, y, 20, 40);
 
-    treePositions.forEach(([x, y]) => {
-      // Tree trunk
-      this.add.rectangle(x, y, 20, 40, 0x654321);
-      // Tree foliage
-      this.add.circle(x, y - 30, 40, 0x228b22);
+    // Tree foliage (three circles for depth)
+    const foliage1 = this.add.circle(x, y - 10, 35, 0x228b22, 0.7);
+    const foliage2 = this.add.circle(x - 15, y - 20, 30, 0x32cd32, 0.8);
+    const foliage3 = this.add.circle(x + 15, y - 15, 28, 0x3cb371, 0.75);
+
+    // Add subtle animation
+    this.tweens.add({
+      targets: [foliage1, foliage2, foliage3],
+      scaleX: 1.05,
+      scaleY: 0.95,
+      duration: 3000,
+      yoyo: true,
+      repeat: -1,
+      ease: 'Sine.easeInOut'
     });
   }
 
-  addFlowers() {
-    const flowers = this.add.group();
+  createFountain(x, y) {
+    // Fountain base
+    const base = this.add.circle(x, y, 60, 0x708090);
+    const water = this.add.circle(x, y, 50, 0x4682b4, 0.6);
 
-    for (let i = 0; i < 50; i++) {
-      const x = Phaser.Math.Between(100, 1500);
-      const y = Phaser.Math.Between(100, 1100);
+    // Particle fountain
+    const particles = this.add.particles('spark');
+    const emitter = particles.createEmitter({
+      x: x,
+      y: y - 20,
+      speed: { min: 50, max: 150 },
+      angle: { min: 260, max: 280 },
+      scale: { start: 0.3, end: 0 },
+      alpha: { start: 0.6, end: 0 },
+      tint: 0x4682b4,
+      lifespan: 2000,
+      frequency: 50,
+      gravityY: 200
+    });
 
-      // Avoid paths
-      if (Math.abs(x - 800) < 100 || Math.abs(y - 600) < 100) continue;
+    // Animate water
+    this.tweens.add({
+      targets: water,
+      scaleX: 1.1,
+      scaleY: 1.1,
+      alpha: 0.4,
+      duration: 2000,
+      yoyo: true,
+      repeat: -1,
+      ease: 'Sine.easeInOut'
+    });
+  }
 
-      const colors = [0xff69b4, 0xffff00, 0xff0000, 0x9370db];
-      const color = Phaser.Utils.Array.GetRandom(colors);
+  createModernPlayer() {
+    this.player = this.physics.add.sprite(400, 300, 'player');
+    this.player.setCollideWorldBounds(true);
+    this.player.setScale(1.5);
 
-      this.add.circle(x, y, 4, color);
+    // Add glow effect
+    this.player.setPipeline('Light2D');
+
+    // Add shadow
+    const shadow = this.add.ellipse(this.player.x, this.player.y + 20, 40, 20, 0x000000, 0.3);
+    this.shadow = shadow;
+
+    // Particle trail when moving
+    this.playerParticles = this.add.particles('particle');
+    this.playerTrail = this.playerParticles.createEmitter({
+      follow: this.player,
+      quantity: 1,
+      scale: { start: 0.2, end: 0 },
+      alpha: { start: 0.5, end: 0 },
+      tint: 0xffd700,
+      lifespan: 500,
+      frequency: 100,
+      on: false
+    });
+
+    this.player.play('idle');
+  }
+
+  createModernZones() {
+    this.zones = [];
+
+    // Library - top left
+    const library = this.add.image(300, 200, 'library-building');
+    library.setInteractive();
+    this.addBuildingEffects(library, 0xffd700);
+    this.zones.push({
+      sprite: library,
+      label: '📚 Ancient Library',
+      scene: 'LibraryScene',
+      particles: this.createZoneParticles(300, 180, 0xffd700)
+    });
+
+    // Bookstore - top right
+    const bookstore = this.add.image(1300, 200, 'bookstore-building');
+    bookstore.setInteractive();
+    this.addBuildingEffects(bookstore, 0x8b5cf6);
+    this.zones.push({
+      sprite: bookstore,
+      label: '🏪 Modern Bookstore',
+      scene: 'BookstoreScene',
+      particles: this.createZoneParticles(1300, 180, 0x8b5cf6)
+    });
+
+    // Writer's Workshop - bottom left
+    const workshop = this.add.image(300, 1000, 'workshop-building');
+    workshop.setInteractive();
+    this.addBuildingEffects(workshop, 0xd97706);
+    this.zones.push({
+      sprite: workshop,
+      label: '🔧 Writer\'s Workshop',
+      scene: 'WritersWorkshopScene',
+      particles: this.createZoneParticles(300, 980, 0xd97706)
+    });
+
+    // Player Home - bottom right
+    const home = this.add.image(1300, 1000, 'home-building');
+    home.setInteractive();
+    this.addBuildingEffects(home, 0x84cc16);
+    this.zones.push({
+      sprite: home,
+      label: '🏠 Your Library',
+      scene: 'PlayerHomeScene',
+      particles: this.createZoneParticles(1300, 980, 0x84cc16)
+    });
+
+    // Add hover effects
+    this.zones.forEach(zone => {
+      zone.sprite.on('pointerover', () => {
+        this.tweens.add({
+          targets: zone.sprite,
+          scaleX: 1.05,
+          scaleY: 1.05,
+          duration: 200,
+          ease: 'Back.easeOut'
+        });
+        this.showZoneLabel(zone.label, zone.sprite.x, zone.sprite.y - 120);
+      });
+
+      zone.sprite.on('pointerout', () => {
+        this.tweens.add({
+          targets: zone.sprite,
+          scaleX: 1,
+          scaleY: 1,
+          duration: 200
+        });
+        this.hideZoneLabel();
+      });
+
+      zone.sprite.on('pointerdown', () => {
+        this.enterZone(zone.scene);
+      });
+    });
+  }
+
+  addBuildingEffects(building, color) {
+    // Add subtle floating animation
+    this.tweens.add({
+      targets: building,
+      y: building.y - 5,
+      duration: 2000,
+      yoyo: true,
+      repeat: -1,
+      ease: 'Sine.easeInOut'
+    });
+
+    // Add dynamic light
+    if (this.lights) {
+      const light = this.lights.addLight(building.x, building.y, 200, color, 0.5);
+      this.tweens.add({
+        targets: light,
+        intensity: 0.8,
+        duration: 3000,
+        yoyo: true,
+        repeat: -1
+      });
     }
   }
 
-  createPlayer() {
-    const startX = gameState.playerPosition.x || 800;
-    const startY = gameState.playerPosition.y || 600;
-
-    // Create player sprite (simple circle for now)
-    this.player = this.physics.add.sprite(startX, startY, null);
-
-    // Draw player as a character
-    const graphics = this.make.graphics({ x: 0, y: 0 });
-    graphics.fillStyle(0x6b46c1);
-    graphics.fillCircle(0, 0, 20);
-    graphics.fillStyle(0xffd700);
-    graphics.fillCircle(0, -5, 8); // Head
-    graphics.generateTexture('player', 40, 40);
-    graphics.destroy();
-
-    this.player.setTexture('player');
-    this.player.setCollideWorldBounds(true);
-    this.player.setDepth(10);
-
-    // Player properties
-    this.player.speed = 200;
-    this.player.moving = false;
-  }
-
-  createZones() {
-    this.zones = [];
-
-    // Library - Top Left
-    const library = this.createBuilding(300, 200, 200, 180, 0x8b4513, '📚 Library');
-    library.zoneKey = 'LibraryScene';
-    library.zoneName = 'Ancient Library';
-    this.zones.push(library);
-
-    // Bookstore - Top Right
-    const bookstore = this.createBuilding(1300, 200, 200, 180, 0x4a6fa5, '🏪 Bookstore');
-    bookstore.zoneKey = 'BookstoreScene';
-    bookstore.zoneName = 'Mystic Bookstore';
-    this.zones.push(bookstore);
-
-    // Author Land - Bottom Right
-    const authorLand = this.createBuilding(1300, 1000, 200, 180, 0x6b46c1, '✨ Author Realm');
-    authorLand.zoneKey = 'AuthorLandScene';
-    authorLand.zoneName = 'Author Realm';
-    this.zones.push(authorLand);
-
-    // Writer's Workshop - Bottom Left
-    const workshop = this.createBuilding(300, 1000, 200, 180, 0x8b0000, '✍️ Writer\'s Workshop');
-    workshop.zoneKey = 'WritersWorkshopScene';
-    workshop.zoneName = 'Writer\'s Workshop';
-    this.zones.push(workshop);
-
-    // Player Home - Center Left
-    const home = this.createBuilding(200, 600, 160, 140, 0xcd853f, '🏠 Your Home');
-    home.zoneKey = 'PlayerHomeScene';
-    home.zoneName = 'Your Home';
-    this.zones.push(home);
-
-    // Daniel Greene NPC (center of town square)
-    this.createDanielNPC(800, 600);
-  }
-
-  createBuilding(x, y, width, height, color, label) {
-    // Building structure
-    const building = this.add.rectangle(x, y, width, height, color);
-    building.setStrokeStyle(4, 0x000000);
-
-    // Roof
-    const roof = this.add.triangle(
-      x, y - height / 2 - 20,
-      0, 40,
-      width / 2, 0,
-      -width / 2, 0,
-      color - 0x202020
-    );
-    roof.setStrokeStyle(2, 0x000000);
-
-    // Door
-    this.add.rectangle(x, y + height / 2 - 20, 40, 50, 0x654321);
-
-    // Label
-    const text = this.add.text(x, y - height / 2 - 50, label, {
-      fontSize: '18px',
-      fontStyle: 'bold',
-      color: '#ffffff',
-      backgroundColor: '#000000',
-      padding: { x: 8, y: 4 }
+  createZoneParticles(x, y, color) {
+    const particles = this.add.particles('spark');
+    const emitter = particles.createEmitter({
+      x: x,
+      y: y,
+      speed: 20,
+      angle: { min: 0, max: 360 },
+      scale: { start: 0.2, end: 0 },
+      alpha: { start: 0.6, end: 0 },
+      tint: color,
+      lifespan: 2000,
+      frequency: 200,
+      gravityY: -50
     });
-    text.setOrigin(0.5);
-
-    // Interaction zone
-    const zone = this.add.zone(x, y + height / 2 + 20, 80, 40);
-    this.physics.add.existing(zone);
-    zone.body.setAllowGravity(false);
-    zone.body.moves = false;
-
-    return zone;
+    return particles;
   }
 
-  createDanielNPC(x, y) {
-    // Daniel Greene NPC in center
-    const daniel = this.add.circle(x, y, 25, 0xd4af37);
-    daniel.setStrokeStyle(3, 0x000000);
-
-    const text = this.add.text(x, y - 50, '👨 Daniel Greene', {
-      fontSize: '16px',
-      fontStyle: 'bold',
-      color: '#d4af37',
-      backgroundColor: '#000000',
-      padding: { x: 6, y: 3 }
+  addAmbientParticles() {
+    // Floating magical particles across the scene
+    const particles = this.add.particles('particle');
+    const emitter = particles.createEmitter({
+      x: { min: 0, max: 1600 },
+      y: -10,
+      speedY: { min: 20, max: 50 },
+      speedX: { min: -10, max: 10 },
+      scale: { start: 0.3, end: 0 },
+      alpha: { start: 0.8, end: 0 },
+      tint: [0xffd700, 0xff69b4, 0x00ffff, 0x90ee90],
+      lifespan: 8000,
+      frequency: 500
     });
-    text.setOrigin(0.5);
-
-    const zone = this.add.zone(x, y, 60, 60);
-    this.physics.add.existing(zone);
-    zone.body.setAllowGravity(false);
-    zone.body.moves = false;
-
-    this.physics.add.overlap(this.player, zone, () => {
-      this.showInteractionPrompt('Press SPACE to talk');
-      this.currentInteraction = () => this.talkToDaniel();
-    }, null, this);
   }
 
-  createNPCs() {
-    // Random readers walking around
-    this.npcs = [];
+  addWeatherEffects() {
+    // Subtle floating leaves or sparkles
+    const sparkles = this.add.particles('spark');
+    const emitter = sparkles.createEmitter({
+      x: { min: -100, max: 1700 },
+      y: { min: 0, max: 1200 },
+      speedX: { min: 10, max: 30 },
+      speedY: { min: -5, max: 5 },
+      scale: { start: 0.15, end: 0 },
+      alpha: { start: 0.4, end: 0 },
+      tint: [0xffffff, 0xfffacd],
+      lifespan: 5000,
+      frequency: 1000,
+      angle: 45
+    });
+  }
 
-    const npcData = [
-      { x: 600, y: 400, color: 0xff6b6b, name: 'Fantasy Fan' },
-      { x: 1000, y: 400, color: 0x4ecdc4, name: 'Book Collector' },
-      { x: 600, y: 800, color: 0x95e1d3, name: 'Aspiring Writer' }
-    ];
+  createModernNPCs() {
+    // Create animated NPCs
+    const npc1 = this.physics.add.sprite(800, 400, 'player');
+    npc1.setTint(0xff6b6b);
+    npc1.play('idle');
+    this.addNPCBehavior(npc1);
 
-    npcData.forEach(data => {
-      const npc = this.add.circle(data.x, data.y, 15, data.color);
-      npc.setStrokeStyle(2, 0x000000);
-      this.npcs.push(npc);
+    const npc2 = this.physics.add.sprite(600, 700, 'player');
+    npc2.setTint(0x4ecdc4);
+    npc2.play('idle');
+    this.addNPCBehavior(npc2);
+  }
 
-      // Random movement
-      this.tweens.add({
-        targets: npc,
-        x: data.x + Phaser.Math.Between(-100, 100),
-        y: data.y + Phaser.Math.Between(-100, 100),
-        duration: 3000,
-        yoyo: true,
-        repeat: -1,
-        ease: 'Sine.easeInOut'
-      });
+  addNPCBehavior(npc) {
+    // Random wandering
+    this.time.addEvent({
+      delay: 3000,
+      callback: () => {
+        const direction = Phaser.Math.Between(0, 3);
+        const speed = 50;
+
+        switch(direction) {
+          case 0: npc.setVelocity(0, -speed); npc.play('walk-up', true); break;
+          case 1: npc.setVelocity(0, speed); npc.play('walk-down', true); break;
+          case 2: npc.setVelocity(-speed, 0); npc.play('walk-left', true); break;
+          case 3: npc.setVelocity(speed, 0); npc.play('walk-right', true); break;
+        }
+
+        this.time.delayedCall(1000, () => {
+          npc.setVelocity(0, 0);
+          npc.play('idle');
+        });
+      },
+      loop: true
     });
   }
 
   setupControls() {
     this.cursors = this.input.keyboard.createCursorKeys();
-    this.keys = this.input.keyboard.addKeys('W,A,S,D,SPACE,E');
-
-    // Zone interactions
-    this.zones.forEach(zone => {
-      this.physics.add.overlap(this.player, zone, (player, zoneObj) => {
-        this.showInteractionPrompt(`Press SPACE to enter ${zoneObj.zoneName}`);
-        this.currentInteraction = () => this.enterZone(zoneObj);
-      }, null, this);
-    });
+    this.keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+    this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+    this.keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+    this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+    this.keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
   }
 
   setupMobileControls() {
+    // Virtual joystick is already in HTML, just need to make it functional
+    document.getElementById('mobile-controls').classList.add('show');
+    document.getElementById('actionButton').classList.add('show');
+
+    this.joystickData = { x: 0, y: 0 };
+
     const joystick = document.getElementById('joystick');
-    const knob = document.getElementById('joystickKnob');
-    const actionBtn = document.getElementById('actionButton');
+    const knob = document.getElementById('joystick-knob');
 
-    let joystickActive = false;
-    let joystickData = { x: 0, y: 0 };
+    let isDragging = false;
+    const joystickRadius = 40;
 
-    const handleJoystickStart = (e) => {
-      joystickActive = true;
-    };
-
-    const handleJoystickMove = (e) => {
-      if (!joystickActive) return;
+    const handleJoystickMove = (clientX, clientY) => {
+      if (!isDragging) return;
 
       const rect = joystick.getBoundingClientRect();
-      const touch = e.touches[0];
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
 
-      let dx = touch.clientX - centerX;
-      let dy = touch.clientY - centerY;
+      let deltaX = clientX - centerX;
+      let deltaY = clientY - centerY;
 
-      const distance = Math.sqrt(dx * dx + dy * dy);
-      const maxDistance = 35;
+      const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 
-      if (distance > maxDistance) {
-        dx = (dx / distance) * maxDistance;
-        dy = (dy / distance) * maxDistance;
+      if (distance > joystickRadius) {
+        deltaX = (deltaX / distance) * joystickRadius;
+        deltaY = (deltaY / distance) * joystickRadius;
       }
 
-      knob.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+      knob.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
 
-      joystickData.x = dx / maxDistance;
-      joystickData.y = dy / maxDistance;
+      this.joystickData.x = deltaX / joystickRadius;
+      this.joystickData.y = deltaY / joystickRadius;
     };
 
-    const handleJoystickEnd = () => {
-      joystickActive = false;
-      knob.style.transform = 'translate(-50%, -50%)';
-      joystickData = { x: 0, y: 0 };
-    };
-
-    joystick.addEventListener('touchstart', handleJoystickStart);
-    joystick.addEventListener('touchmove', handleJoystickMove);
-    joystick.addEventListener('touchend', handleJoystickEnd);
-
-    actionBtn.addEventListener('click', () => {
-      if (this.currentInteraction) {
-        this.currentInteraction();
-      }
+    joystick.addEventListener('touchstart', (e) => {
+      isDragging = true;
+      e.preventDefault();
     });
 
-    this.mobileJoystick = joystickData;
+    joystick.addEventListener('touchmove', (e) => {
+      const touch = e.touches[0];
+      handleJoystickMove(touch.clientX, touch.clientY);
+      e.preventDefault();
+    });
+
+    const endDrag = () => {
+      isDragging = false;
+      knob.style.transform = 'translate(0, 0)';
+      this.joystickData = { x: 0, y: 0 };
+    };
+
+    joystick.addEventListener('touchend', endDrag);
+    joystick.addEventListener('touchcancel', endDrag);
+
+    // Action button
+    document.getElementById('actionButton').addEventListener('touchstart', () => {
+      this.checkZoneInteraction();
+    });
   }
 
   update() {
     if (!this.player) return;
 
-    let velocityX = 0;
-    let velocityY = 0;
-
-    // Keyboard controls
-    if (this.cursors.left.isDown || this.keys.A.isDown) {
-      velocityX = -this.player.speed;
-    } else if (this.cursors.right.isDown || this.keys.D.isDown) {
-      velocityX = this.player.speed;
+    // Update shadow position
+    if (this.shadow) {
+      this.shadow.setPosition(this.player.x, this.player.y + 20);
     }
 
-    if (this.cursors.up.isDown || this.keys.W.isDown) {
-      velocityY = -this.player.speed;
-    } else if (this.cursors.down.isDown || this.keys.S.isDown) {
-      velocityY = this.player.speed;
+    const speed = 200;
+    let velocityX = 0;
+    let velocityY = 0;
+    let isMoving = false;
+
+    // Keyboard controls
+    if (this.cursors.left.isDown || this.keyA.isDown) {
+      velocityX = -speed;
+      isMoving = true;
+      this.player.play('walk-left', true);
+    } else if (this.cursors.right.isDown || this.keyD.isDown) {
+      velocityX = speed;
+      isMoving = true;
+      this.player.play('walk-right', true);
+    }
+
+    if (this.cursors.up.isDown || this.keyW.isDown) {
+      velocityY = -speed;
+      isMoving = true;
+      this.player.play('walk-up', true);
+    } else if (this.cursors.down.isDown || this.keyS.isDown) {
+      velocityY = speed;
+      isMoving = true;
+      this.player.play('walk-down', true);
     }
 
     // Mobile joystick
-    if (this.mobileJoystick) {
-      velocityX += this.mobileJoystick.x * this.player.speed;
-      velocityY += this.mobileJoystick.y * this.player.speed;
+    if (isMobile && this.joystickData) {
+      if (Math.abs(this.joystickData.x) > 0.1 || Math.abs(this.joystickData.y) > 0.1) {
+        velocityX = this.joystickData.x * speed;
+        velocityY = this.joystickData.y * speed;
+        isMoving = true;
+
+        if (Math.abs(velocityX) > Math.abs(velocityY)) {
+          this.player.play(velocityX > 0 ? 'walk-right' : 'walk-left', true);
+        } else {
+          this.player.play(velocityY > 0 ? 'walk-down' : 'walk-up', true);
+        }
+      }
     }
 
-    // Apply velocity
     this.player.setVelocity(velocityX, velocityY);
 
-    // Normalize diagonal movement
-    if (velocityX !== 0 && velocityY !== 0) {
-      this.player.setVelocity(velocityX * 0.7071, velocityY * 0.7071);
+    // Enable/disable particle trail
+    if (isMoving) {
+      this.playerTrail.start();
+    } else {
+      this.playerTrail.stop();
+      this.player.play('idle', true);
     }
 
-    // Interaction
-    if (Phaser.Input.Keyboard.JustDown(this.keys.SPACE) ||
-        Phaser.Input.Keyboard.JustDown(this.keys.E)) {
-      if (this.currentInteraction) {
-        this.currentInteraction();
-      }
+    // Check for interaction with E key
+    if (Phaser.Input.Keyboard.JustDown(this.keyE)) {
+      this.checkZoneInteraction();
     }
 
-    // Save player position
-    gameState.playerPosition = { x: this.player.x, y: this.player.y };
+    // Save game state
+    this.saveGame();
   }
 
-  showInteractionPrompt(text) {
-    if (this.interactionText) {
-      this.interactionText.destroy();
+  checkZoneInteraction() {
+    this.zones.forEach(zone => {
+      const distance = Phaser.Math.Distance.Between(
+        this.player.x, this.player.y,
+        zone.sprite.x, zone.sprite.y
+      );
+
+      if (distance < 150) {
+        this.enterZone(zone.scene);
+      }
+    });
+  }
+
+  enterZone(sceneKey) {
+    // Fade transition
+    this.cameras.main.fadeOut(500);
+    this.time.delayedCall(500, () => {
+      this.scene.start(sceneKey);
+    });
+  }
+
+  showZoneLabel(text, x, y) {
+    if (this.zoneLabel) {
+      this.zoneLabel.destroy();
     }
 
-    this.interactionText = this.add.text(this.player.x, this.player.y - 60, text, {
-      fontSize: '14px',
+    const label = this.add.text(x, y, text, {
+      fontSize: '24px',
+      fontFamily: 'Arial, sans-serif',
       color: '#ffffff',
-      backgroundColor: '#000000',
-      padding: { x: 6, y: 3 }
+      backgroundColor: '#000000aa',
+      padding: { x: 15, y: 10 },
+      borderRadius: 8
     });
-    this.interactionText.setOrigin(0.5);
+    label.setOrigin(0.5);
+    label.setDepth(1000);
+    label.setScrollFactor(1);
 
-    this.time.delayedCall(2000, () => {
-      if (this.interactionText) {
-        this.interactionText.destroy();
-      }
+    this.tweens.add({
+      targets: label,
+      alpha: { from: 0, to: 1 },
+      y: y - 10,
+      duration: 200,
+      ease: 'Back.easeOut'
     });
+
+    this.zoneLabel = label;
   }
 
-  enterZone(zone) {
-    console.log('Entering:', zone.zoneKey);
-    this.scene.start(zone.zoneKey);
-  }
-
-  talkToDaniel() {
-    this.showDialogue([
-      "Hey there! Welcome to Fantasy Reading Quest!",
-      "I'm Daniel Greene, your guide through the world of fantasy literature.",
-      "Explore different zones to discover books, meet authors, and build your library!",
-      "Check out the Library, Bookstore, or even visit Author Lands!",
-      "Your journey starts now. Happy reading!"
-    ]);
-  }
-
-  showDialogue(messages) {
-    let currentIndex = 0;
-
-    const dialogueBox = this.add.rectangle(
-      this.cameras.main.centerX,
-      this.cameras.main.height - 100,
-      this.cameras.main.width - 40,
-      120,
-      0x000000,
-      0.9
-    );
-    dialogueBox.setStrokeStyle(3, 0xd4af37);
-    dialogueBox.setScrollFactor(0);
-    dialogueBox.setDepth(1000);
-
-    const dialogueText = this.add.text(
-      this.cameras.main.centerX,
-      this.cameras.main.height - 100,
-      messages[0],
-      {
-        fontSize: '18px',
-        color: '#ffffff',
-        wordWrap: { width: this.cameras.main.width - 80 },
-        align: 'center'
-      }
-    );
-    dialogueText.setOrigin(0.5);
-    dialogueText.setScrollFactor(0);
-    dialogueText.setDepth(1001);
-
-    const nextMessage = () => {
-      currentIndex++;
-      if (currentIndex < messages.length) {
-        dialogueText.setText(messages[currentIndex]);
-      } else {
-        dialogueBox.destroy();
-        dialogueText.destroy();
-        this.input.keyboard.off('keydown-SPACE', nextMessage);
-      }
-    };
-
-    this.input.keyboard.on('keydown-SPACE', nextMessage);
-
-    // Auto-close after last message
-    this.time.delayedCall(messages.length * 3000, () => {
-      if (dialogueBox.active) {
-        dialogueBox.destroy();
-        dialogueText.destroy();
-      }
-    });
+  hideZoneLabel() {
+    if (this.zoneLabel) {
+      this.tweens.add({
+        targets: this.zoneLabel,
+        alpha: 0,
+        duration: 200,
+        onComplete: () => {
+          if (this.zoneLabel) {
+            this.zoneLabel.destroy();
+            this.zoneLabel = null;
+          }
+        }
+      });
+    }
   }
 
   updateLocationLabel(text) {
     const label = document.getElementById('locationLabel');
-    label.textContent = text;
-    label.classList.add('show');
-    setTimeout(() => label.classList.remove('show'), 3000);
+    if (label) {
+      label.textContent = text;
+    }
   }
 
   updateBookCount() {
-    document.getElementById('bookCount').textContent = gameState.booksCollected;
+    const bookCount = document.getElementById('bookCount');
+    if (bookCount) {
+      bookCount.textContent = gameState.booksCollected;
+    }
+  }
+
+  saveGame() {
+    if (this.player) {
+      gameState.playerPosition = { x: this.player.x, y: this.player.y };
+    }
+    localStorage.setItem('fantasy-rpg-save', JSON.stringify(gameState));
   }
 }
 
 // ============================================
-// BASE INDOOR SCENE (Reusable base class)
+// BASE INDOOR SCENE - Modern Interior Design
 // ============================================
 
 class BaseIndoorScene extends Phaser.Scene {
@@ -543,235 +874,516 @@ class BaseIndoorScene extends Phaser.Scene {
   }
 
   create() {
-    this.createLibraryWorld();
-    this.createPlayer();
-    this.createBookshelves();
+    this.createModernInterior();
+    this.createModernPlayer();
+    this.createModernBookshelves();
     this.setupControls();
-    this.updateLocationLabel('Ancient Library - Explore Thousands of Fantasy Books');
+    this.addIndoorLighting();
 
     if (isMobile) {
       this.setupMobileControls();
     }
+
+    this.updateBookCount();
   }
 
-  createLibraryWorld() {
-    // Library floor
-    this.add.rectangle(640, 360, 1280, 720, 0x8b7355);
+  createModernInterior() {
+    // Rich wooden floor with pattern
+    const floor = this.add.graphics();
 
-    // Walls
-    this.add.rectangle(640, 20, 1280, 40, 0x654321);
-    this.add.rectangle(640, 700, 1280, 40, 0x654321);
-    this.add.rectangle(20, 360, 40, 720, 0x654321);
-    this.add.rectangle(1260, 360, 40, 720, 0x654321);
+    // Create parquet floor pattern
+    for (let x = 0; x < 800; x += 80) {
+      for (let y = 0; y < 600; y += 80) {
+        const shade = ((x + y) / 80) % 2 === 0 ? 0x8b4513 : 0xa0522d;
+        floor.fillStyle(shade, 1);
+        floor.fillRect(x, y, 80, 80);
 
-    // Carpet
-    this.add.rectangle(640, 360, 600, 500, 0x8b0000, 0.3);
+        // Add wood grain effect
+        floor.lineStyle(1, 0x654321, 0.3);
+        for (let i = 0; i < 5; i++) {
+          floor.lineBetween(x, y + i * 16, x + 80, y + i * 16);
+        }
+      }
+    }
 
-    // Exit door
-    this.createExitDoor(640, 680);
+    // Walls with texture
+    const wallColor = 0x2c1810;
+    floor.fillStyle(wallColor, 1);
+    floor.fillRect(0, 0, 800, 20); // Top wall
+    floor.fillRect(0, 580, 800, 20); // Bottom wall
+    floor.fillRect(0, 0, 20, 600); // Left wall
+    floor.fillRect(780, 0, 20, 600); // Right wall
+
+    // Add decorative elements
+    this.addRug(400, 300);
+    this.addChandelier(400, 100);
   }
 
-  createBookshelves() {
-    // Create interactive bookshelves with different genres
-    const shelves = [
-      { x: 200, y: 200, genre: 'Epic Fantasy', books: ['Mistborn', 'The Way of Kings', 'The Eye of the World'] },
-      { x: 500, y: 200, genre: 'Grimdark', books: ['The Blade Itself', 'The Black Company'] },
-      { x: 800, y: 200, genre: 'Cozy Fantasy', books: ['Legends & Lattes', 'The House in the Cerulean Sea'] },
-      { x: 1100, y: 200, genre: 'Urban Fantasy', books: ['The Dresden Files', 'Jade City'] },
+  addRug(x, y) {
+    const rug = this.add.graphics();
+    rug.fillStyle(0x8b0000, 0.7);
+    rug.fillRoundedRect(x - 100, y - 60, 200, 120, 8);
+
+    // Pattern
+    rug.lineStyle(3, 0xffd700, 0.5);
+    rug.strokeRoundedRect(x - 90, y - 50, 180, 100, 6);
+    rug.strokeRoundedRect(x - 80, y - 40, 160, 80, 4);
+  }
+
+  addChandelier(x, y) {
+    const chandelier = this.add.circle(x, y, 25, 0xffd700, 0.8);
+
+    // Add light rays
+    const particles = this.add.particles('spark');
+    const emitter = particles.createEmitter({
+      x: x,
+      y: y,
+      speed: 10,
+      angle: { min: 0, max: 360 },
+      scale: { start: 0.3, end: 0 },
+      alpha: { start: 0.8, end: 0 },
+      tint: 0xffd700,
+      lifespan: 1000,
+      frequency: 200,
+      blendMode: 'ADD'
+    });
+
+    // Gentle sway
+    this.tweens.add({
+      targets: chandelier,
+      x: x - 5,
+      duration: 2000,
+      yoyo: true,
+      repeat: -1,
+      ease: 'Sine.easeInOut'
+    });
+  }
+
+  addIndoorLighting() {
+    if (this.lights) {
+      this.lights.enable().setAmbientColor(0x555555);
+
+      // Chandelier light
+      this.lights.addLight(400, 100, 300, 0xffd700, 1.5);
+
+      // Window lights
+      this.lights.addLight(100, 200, 150, 0x87ceeb, 0.8);
+      this.lights.addLight(700, 200, 150, 0x87ceeb, 0.8);
+    }
+  }
+
+  createModernPlayer() {
+    this.player = this.physics.add.sprite(400, 500, 'player');
+    this.player.setCollideWorldBounds(true);
+    this.player.setScale(1.5);
+    this.player.setPipeline('Light2D');
+
+    this.cameras.main.startFollow(this.player, true, 0.08, 0.08);
+
+    // Shadow
+    this.shadow = this.add.ellipse(this.player.x, this.player.y + 20, 40, 20, 0x000000, 0.3);
+  }
+
+  createModernBookshelves() {
+    this.books = this.physics.add.staticGroup();
+
+    const bookData = [
+      { x: 150, y: 150, title: 'The Way of Kings', author: 'Brandon Sanderson', color: 0x3b82f6 },
+      { x: 300, y: 150, title: 'The Name of the Wind', author: 'Patrick Rothfuss', color: 0xef4444 },
+      { x: 450, y: 150, title: 'The Fellowship of the Ring', author: 'J.R.R. Tolkien', color: 0x22c55e },
+      { x: 600, y: 150, title: 'A Game of Thrones', author: 'George R.R. Martin', color: 0x8b5cf6 },
+      { x: 150, y: 250, title: 'The Eye of the World', author: 'Robert Jordan', color: 0xf59e0b },
+      { x: 300, y: 250, title: 'Mistborn', author: 'Brandon Sanderson', color: 0x06b6d4 },
     ];
 
-    shelves.forEach(shelf => {
-      this.createBookshelf(shelf.x, shelf.y, shelf.genre, shelf.books);
+    bookData.forEach(data => {
+      this.createBookDisplay(data);
     });
+
+    // Overlap detection for picking up books
+    this.physics.add.overlap(this.player, this.books, this.collectBook, null, this);
   }
 
-  createBookshelf(x, y, genre, books) {
-    // Bookshelf visual
-    const shelf = this.add.rectangle(x, y, 150, 200, 0x654321);
-    shelf.setStrokeStyle(3, 0x000000);
+  createBookDisplay(data) {
+    // Book with 3D effect
+    const book = this.add.graphics();
 
-    // Add colorful books
-    for (let i = 0; i < 8; i++) {
-      const bookX = x - 60 + (i * 15);
-      const bookY = y - 40 + Phaser.Math.Between(-10, 10);
-      const bookColor = Phaser.Display.Color.RandomRGB().color;
-      this.add.rectangle(bookX, bookY, 12, 50, bookColor);
-    }
+    // Shadow
+    book.fillStyle(0x000000, 0.2);
+    book.fillRoundedRect(5, 5, 70, 90, 4);
 
-    // Genre label
-    this.add.text(x, y - 130, genre, {
-      fontSize: '16px',
-      fontStyle: 'bold',
-      color: '#d4af37',
-      backgroundColor: '#000000',
-      padding: { x: 6, y: 3 }
-    }).setOrigin(0.5);
+    // Book cover
+    book.fillStyle(data.color, 1);
+    book.fillRoundedRect(0, 0, 70, 90, 4);
 
-    // Interaction zone
-    const zone = this.add.zone(x, y + 120, 150, 60);
-    this.physics.add.existing(zone);
-    zone.books = books;
-    zone.genre = genre;
+    // Spine highlight
+    book.fillStyle(0xffffff, 0.3);
+    book.fillRect(5, 5, 10, 80);
 
-    this.physics.add.overlap(this.player, zone, () => {
-      this.showInteractionPrompt(`Press SPACE to browse ${genre}`);
-      this.currentInteraction = () => this.browseShelf(zone);
-    }, null, this);
-  }
+    // Border
+    book.lineStyle(2, 0x000000, 0.5);
+    book.strokeRoundedRect(0, 0, 70, 90, 4);
 
-  browseShelf(shelf) {
-    const bookList = shelf.books.join(', ');
-    this.showBookOverlay(shelf.genre, shelf.books);
-  }
+    book.generateTexture(`book-${data.x}-${data.y}`, 75, 95);
+    book.destroy();
 
-  showBookOverlay(genre, books) {
-    // Create overlay
-    const overlay = this.add.rectangle(640, 360, 800, 500, 0x000000, 0.95);
-    overlay.setStrokeStyle(4, 0xd4af37);
-    overlay.setScrollFactor(0);
-    overlay.setDepth(2000);
-    overlay.setInteractive();
+    const bookSprite = this.books.create(data.x, data.y, `book-${data.x}-${data.y}`);
+    bookSprite.setData('bookInfo', data);
+    bookSprite.setInteractive();
+    bookSprite.setScale(0.8);
 
-    const title = this.add.text(640, 150, genre, {
-      fontSize: '32px',
-      fontStyle: 'bold',
-      color: '#d4af37'
-    }).setOrigin(0.5).setScrollFactor(0).setDepth(2001);
-
-    let yPos = 220;
-    books.forEach(book => {
-      const bookBtn = this.add.text(640, yPos, `📖 ${book}`, {
-        fontSize: '20px',
-        color: '#ffffff',
-        backgroundColor: '#6b46c1',
-        padding: { x: 20, y: 10 }
-      }).setOrigin(0.5).setScrollFactor(0).setDepth(2001).setInteractive();
-
-      bookBtn.on('pointerdown', () => {
-        this.addToLibrary(book);
-        bookBtn.setStyle({ backgroundColor: '#228b22' });
-        bookBtn.setText(`✓ ${book} - Added to Library!`);
+    // Hover effect
+    bookSprite.on('pointerover', () => {
+      this.tweens.add({
+        targets: bookSprite,
+        scaleX: 0.9,
+        scaleY: 0.9,
+        y: bookSprite.y - 10,
+        duration: 200,
+        ease: 'Back.easeOut'
       });
 
-      yPos += 60;
+      this.showBookInfo(data);
     });
 
-    const closeBtn = this.add.text(640, 550, 'Close [ESC]', {
-      fontSize: '18px',
-      color: '#ffffff',
-      backgroundColor: '#8b0000',
-      padding: { x: 15, y: 8 }
-    }).setOrigin(0.5).setScrollFactor(0).setDepth(2001).setInteractive();
+    bookSprite.on('pointerout', () => {
+      this.tweens.add({
+        targets: bookSprite,
+        scaleX: 0.8,
+        scaleY: 0.8,
+        y: data.y,
+        duration: 200
+      });
 
-    closeBtn.on('pointerdown', () => {
-      overlay.destroy();
-      title.destroy();
-      closeBtn.destroy();
-      this.children.list.filter(child =>
-        child.depth === 2001 && child.type === 'Text'
-      ).forEach(child => child.destroy());
+      this.hideBookInfo();
+    });
+
+    // Floating animation
+    this.tweens.add({
+      targets: bookSprite,
+      y: data.y - 3,
+      duration: 1500,
+      yoyo: true,
+      repeat: -1,
+      ease: 'Sine.easeInOut',
+      delay: Math.random() * 1000
+    });
+
+    // Add sparkle particles
+    const particles = this.add.particles('spark');
+    const emitter = particles.createEmitter({
+      x: data.x,
+      y: data.y,
+      speed: 10,
+      angle: { min: 0, max: 360 },
+      scale: { start: 0.2, end: 0 },
+      alpha: { start: 0.6, end: 0 },
+      tint: data.color,
+      lifespan: 1500,
+      frequency: 500
     });
   }
 
-  addToLibrary(bookTitle) {
-    if (!gameState.booksRead.includes(bookTitle)) {
-      gameState.booksRead.push(bookTitle);
-      gameState.booksCollected++;
-      this.saveGame();
-      document.getElementById('bookCount').textContent = gameState.booksCollected;
+  showBookInfo(data) {
+    if (this.bookInfoPanel) {
+      this.bookInfoPanel.destroy();
+    }
+
+    const panel = this.add.container(400, 450);
+
+    const bg = this.add.graphics();
+    bg.fillStyle(0x000000, 0.9);
+    bg.fillRoundedRect(-150, -60, 300, 120, 12);
+    bg.lineStyle(3, 0xffd700, 1);
+    bg.strokeRoundedRect(-150, -60, 300, 120, 12);
+
+    const title = this.add.text(0, -30, data.title, {
+      fontSize: '18px',
+      fontFamily: 'Georgia, serif',
+      color: '#ffd700',
+      fontStyle: 'bold',
+      align: 'center'
+    }).setOrigin(0.5);
+
+    const author = this.add.text(0, 0, `by ${data.author}`, {
+      fontSize: '14px',
+      fontFamily: 'Arial, sans-serif',
+      color: '#ffffff',
+      align: 'center'
+    }).setOrigin(0.5);
+
+    const instruction = this.add.text(0, 30, 'Press E to collect', {
+      fontSize: '12px',
+      fontFamily: 'Arial, sans-serif',
+      color: '#aaaaaa',
+      align: 'center'
+    }).setOrigin(0.5);
+
+    panel.add([bg, title, author, instruction]);
+    panel.setDepth(1000);
+    panel.setAlpha(0);
+
+    this.tweens.add({
+      targets: panel,
+      alpha: 1,
+      y: 470,
+      duration: 200,
+      ease: 'Back.easeOut'
+    });
+
+    this.bookInfoPanel = panel;
+  }
+
+  hideBookInfo() {
+    if (this.bookInfoPanel) {
+      this.tweens.add({
+        targets: this.bookInfoPanel,
+        alpha: 0,
+        duration: 200,
+        onComplete: () => {
+          if (this.bookInfoPanel) {
+            this.bookInfoPanel.destroy();
+            this.bookInfoPanel = null;
+          }
+        }
+      });
     }
   }
 
-  createPlayer() {
-    this.player = this.physics.add.sprite(640, 600, 'player');
-    this.player.setCollideWorldBounds(true);
-    this.player.setDepth(10);
-    this.player.speed = 200;
+  collectBook(player, book) {
+    const bookInfo = book.getData('bookInfo');
+
+    if (!gameState.booksRead.includes(bookInfo.title)) {
+      gameState.booksRead.push(bookInfo.title);
+      gameState.booksCollected++;
+
+      // Explosion of particles
+      const particles = this.add.particles('spark');
+      const burst = particles.createEmitter({
+        x: book.x,
+        y: book.y,
+        speed: { min: 100, max: 200 },
+        angle: { min: 0, max: 360 },
+        scale: { start: 0.5, end: 0 },
+        alpha: { start: 1, end: 0 },
+        tint: bookInfo.color,
+        lifespan: 1000,
+        quantity: 20,
+        blendMode: 'ADD'
+      });
+
+      burst.explode();
+
+      // Flash effect
+      this.cameras.main.flash(200, 255, 255, 255, false, (camera, progress) => {
+        if (progress === 1) {
+          particles.destroy();
+        }
+      });
+
+      book.destroy();
+      this.updateBookCount();
+
+      this.showCollectionNotification(bookInfo);
+    }
   }
 
-  createExitDoor(x, y) {
-    const door = this.add.rectangle(x, y, 80, 60, 0x654321);
-    door.setStrokeStyle(3, 0x000000);
+  showCollectionNotification(bookInfo) {
+    const notification = this.add.container(400, 100);
 
-    const text = this.add.text(x, y - 40, '🚪 Exit', {
-      fontSize: '14px',
-      color: '#ffffff',
-      backgroundColor: '#000000',
-      padding: { x: 4, y: 2 }
+    const bg = this.add.graphics();
+    bg.fillStyle(0x22c55e, 0.95);
+    bg.fillRoundedRect(-200, -40, 400, 80, 12);
+
+    const icon = this.add.text(-180, 0, '📚', {
+      fontSize: '32px'
     }).setOrigin(0.5);
 
-    const zone = this.add.zone(x, y, 80, 60);
-    this.physics.add.existing(zone);
+    const text = this.add.text(-120, -10, `Collected: ${bookInfo.title}`, {
+      fontSize: '16px',
+      fontFamily: 'Arial, sans-serif',
+      color: '#ffffff',
+      fontStyle: 'bold'
+    }).setOrigin(0, 0.5);
 
-    this.physics.add.overlap(this.player, zone, () => {
-      this.showInteractionPrompt('Press SPACE to exit');
-      this.currentInteraction = () => this.scene.start('MainWorldScene');
-    }, null, this);
+    const subtext = this.add.text(-120, 10, `by ${bookInfo.author}`, {
+      fontSize: '12px',
+      fontFamily: 'Arial, sans-serif',
+      color: '#e0e0e0'
+    }).setOrigin(0, 0.5);
+
+    notification.add([bg, icon, text, subtext]);
+    notification.setDepth(2000);
+    notification.setAlpha(0);
+    notification.setY(50);
+
+    this.tweens.add({
+      targets: notification,
+      alpha: 1,
+      y: 100,
+      duration: 300,
+      ease: 'Back.easeOut'
+    });
+
+    this.time.delayedCall(3000, () => {
+      this.tweens.add({
+        targets: notification,
+        alpha: 0,
+        y: 50,
+        duration: 300,
+        onComplete: () => notification.destroy()
+      });
+    });
   }
 
   setupControls() {
     this.cursors = this.input.keyboard.createCursorKeys();
-    this.keys = this.input.keyboard.addKeys('W,A,S,D,SPACE,E,ESC');
-
-    this.input.keyboard.on('keydown-ESC', () => {
-      this.scene.start('MainWorldScene');
-    });
+    this.keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+    this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+    this.keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+    this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+    this.keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
+    this.keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
   }
 
   setupMobileControls() {
-    const actionBtn = document.getElementById('actionButton');
-    actionBtn.onclick = () => {
-      if (this.currentInteraction) {
-        this.currentInteraction();
+    document.getElementById('mobile-controls').classList.add('show');
+    document.getElementById('actionButton').classList.add('show');
+
+    this.joystickData = { x: 0, y: 0 };
+
+    const joystick = document.getElementById('joystick');
+    const knob = document.getElementById('joystick-knob');
+
+    let isDragging = false;
+    const joystickRadius = 40;
+
+    const handleJoystickMove = (clientX, clientY) => {
+      if (!isDragging) return;
+
+      const rect = joystick.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      let deltaX = clientX - centerX;
+      let deltaY = clientY - centerY;
+
+      const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+      if (distance > joystickRadius) {
+        deltaX = (deltaX / distance) * joystickRadius;
+        deltaY = (deltaY / distance) * joystickRadius;
       }
+
+      knob.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+
+      this.joystickData.x = deltaX / joystickRadius;
+      this.joystickData.y = deltaY / joystickRadius;
     };
+
+    joystick.addEventListener('touchstart', (e) => {
+      isDragging = true;
+      e.preventDefault();
+    });
+
+    joystick.addEventListener('touchmove', (e) => {
+      const touch = e.touches[0];
+      handleJoystickMove(touch.clientX, touch.clientY);
+      e.preventDefault();
+    });
+
+    const endDrag = () => {
+      isDragging = false;
+      knob.style.transform = 'translate(0, 0)';
+      this.joystickData = { x: 0, y: 0 };
+    };
+
+    joystick.addEventListener('touchend', endDrag);
+    joystick.addEventListener('touchcancel', endDrag);
   }
 
   update() {
     if (!this.player) return;
 
+    // Update shadow
+    if (this.shadow) {
+      this.shadow.setPosition(this.player.x, this.player.y + 20);
+    }
+
+    const speed = 200;
     let velocityX = 0;
     let velocityY = 0;
+    let isMoving = false;
 
-    if (this.cursors.left.isDown || this.keys.A.isDown) velocityX = -this.player.speed;
-    else if (this.cursors.right.isDown || this.keys.D.isDown) velocityX = this.player.speed;
+    // Keyboard controls
+    if (this.cursors.left.isDown || this.keyA.isDown) {
+      velocityX = -speed;
+      isMoving = true;
+      this.player.play('walk-left', true);
+    } else if (this.cursors.right.isDown || this.keyD.isDown) {
+      velocityX = speed;
+      isMoving = true;
+      this.player.play('walk-right', true);
+    }
 
-    if (this.cursors.up.isDown || this.keys.W.isDown) velocityY = -this.player.speed;
-    else if (this.cursors.down.isDown || this.keys.S.isDown) velocityY = this.player.speed;
+    if (this.cursors.up.isDown || this.keyW.isDown) {
+      velocityY = -speed;
+      isMoving = true;
+      this.player.play('walk-up', true);
+    } else if (this.cursors.down.isDown || this.keyS.isDown) {
+      velocityY = speed;
+      isMoving = true;
+      this.player.play('walk-down', true);
+    }
+
+    // Mobile joystick
+    if (isMobile && this.joystickData) {
+      if (Math.abs(this.joystickData.x) > 0.1 || Math.abs(this.joystickData.y) > 0.1) {
+        velocityX = this.joystickData.x * speed;
+        velocityY = this.joystickData.y * speed;
+        isMoving = true;
+
+        if (Math.abs(velocityX) > Math.abs(velocityY)) {
+          this.player.play(velocityX > 0 ? 'walk-right' : 'walk-left', true);
+        } else {
+          this.player.play(velocityY > 0 ? 'walk-down' : 'walk-up', true);
+        }
+      }
+    }
 
     this.player.setVelocity(velocityX, velocityY);
 
-    if (velocityX !== 0 && velocityY !== 0) {
-      this.player.setVelocity(velocityX * 0.7071, velocityY * 0.7071);
+    if (!isMoving) {
+      this.player.play('idle', true);
     }
 
-    if (Phaser.Input.Keyboard.JustDown(this.keys.SPACE) ||
-        Phaser.Input.Keyboard.JustDown(this.keys.E)) {
-      if (this.currentInteraction) {
-        this.currentInteraction();
-      }
+    // Exit to main world
+    if (Phaser.Input.Keyboard.JustDown(this.keyESC)) {
+      this.exitToMainWorld();
     }
+
+    this.saveGame();
   }
 
-  showInteractionPrompt(text) {
-    if (this.interactionText) this.interactionText.destroy();
-
-    this.interactionText = this.add.text(this.player.x, this.player.y - 60, text, {
-      fontSize: '14px',
-      color: '#ffffff',
-      backgroundColor: '#000000',
-      padding: { x: 6, y: 3 }
-    }).setOrigin(0.5);
-
-    this.time.delayedCall(2000, () => {
-      if (this.interactionText) this.interactionText.destroy();
+  exitToMainWorld() {
+    this.cameras.main.fadeOut(500);
+    this.time.delayedCall(500, () => {
+      this.scene.start('MainWorldScene');
     });
   }
 
   updateLocationLabel(text) {
     const label = document.getElementById('locationLabel');
-    label.textContent = text;
-    label.classList.add('show');
+    if (label) {
+      label.textContent = text;
+    }
+  }
+
+  updateBookCount() {
+    const bookCount = document.getElementById('bookCount');
+    if (bookCount) {
+      bookCount.textContent = gameState.booksCollected;
+    }
   }
 
   saveGame() {
@@ -780,7 +1392,7 @@ class BaseIndoorScene extends Phaser.Scene {
 }
 
 // ============================================
-// LIBRARY SCENE (Actual scene instance)
+// SCENE INSTANCES
 // ============================================
 
 class LibraryScene extends BaseIndoorScene {
@@ -790,13 +1402,9 @@ class LibraryScene extends BaseIndoorScene {
 
   create() {
     super.create();
-    this.updateLocationLabel('Ancient Library - Explore Thousands of Fantasy Books');
+    this.updateLocationLabel('📚 Ancient Library - Hall of Epic Fantasy');
   }
 }
-
-// ============================================
-// OTHER INDOOR SCENES
-// ============================================
 
 class BookstoreScene extends BaseIndoorScene {
   constructor() {
@@ -805,7 +1413,7 @@ class BookstoreScene extends BaseIndoorScene {
 
   create() {
     super.create();
-    this.updateLocationLabel('Mystic Bookstore - Buy and Discover New Releases');
+    this.updateLocationLabel('🏪 Modern Bookstore - New Releases & Bestsellers');
   }
 }
 
@@ -816,7 +1424,7 @@ class AuthorLandScene extends BaseIndoorScene {
 
   create() {
     super.create();
-    this.updateLocationLabel('Author Realm - Meet Your Favorite Fantasy Authors');
+    this.updateLocationLabel('✍️ Author Lands - Meet Your Favorite Authors');
   }
 }
 
@@ -827,7 +1435,7 @@ class WritersWorkshopScene extends BaseIndoorScene {
 
   create() {
     super.create();
-    this.updateLocationLabel('Writer\'s Workshop - Learn the Craft from Masters');
+    this.updateLocationLabel('🔧 Writer\'s Workshop - Learn the Craft');
   }
 }
 
@@ -838,20 +1446,20 @@ class PlayerHomeScene extends BaseIndoorScene {
 
   create() {
     super.create();
-    this.updateLocationLabel('Your Home - Your Personal Fantasy Library');
+    this.updateLocationLabel('🏠 Your Personal Library - Your Collection');
   }
 }
 
 // ============================================
-// GAME CONFIGURATION & INITIALIZATION
+// GAME CONFIGURATION
 // ============================================
 
 const config = {
   type: Phaser.AUTO,
-  width: Math.min(1280, window.innerWidth),
-  height: Math.min(720, window.innerHeight),
+  width: 800,
+  height: 600,
   parent: 'game-container',
-  backgroundColor: '#1a1a2e',
+  backgroundColor: '#1a1a1a',
   physics: {
     default: 'arcade',
     arcade: {
@@ -859,20 +1467,25 @@ const config = {
       debug: false
     }
   },
-  scene: [PreloadScene, MainWorldScene, LibraryScene, BookstoreScene, AuthorLandScene, WritersWorkshopScene, PlayerHomeScene],
+  scene: [
+    PreloadScene,
+    MainWorldScene,
+    LibraryScene,
+    BookstoreScene,
+    AuthorLandScene,
+    WritersWorkshopScene,
+    PlayerHomeScene
+  ],
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH
   },
-  pixelArt: false,
-  roundPixels: true
+  render: {
+    pixelArt: false,
+    antialias: true,
+    antialiasGL: true,
+    roundPixels: false
+  }
 };
 
-// Initialize mobile controls if on mobile device
-if (isMobile) {
-  document.getElementById('mobile-controls').classList.add('show');
-  document.getElementById('actionButton').classList.add('show');
-}
-
-// Start the game!
 const game = new Phaser.Game(config);
