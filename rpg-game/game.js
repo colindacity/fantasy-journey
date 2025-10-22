@@ -1,10 +1,10 @@
 // ============================================
 // FANTASY READING QUEST - Main Game File
 // A top-down RPG for discovering fantasy books
-// Version: 1.0.1 - Fixed class initialization
+// Version: 1.0.2 - Fixed scene key initialization
 // ============================================
 
-const GAME_VERSION = '1.0.1';
+const GAME_VERSION = '1.0.2';
 console.log('%c🎮 Fantasy Reading Quest v' + GAME_VERSION, 'font-size: 20px; font-weight: bold; color: #6b46c1; background: #d4af37; padding: 10px;');
 console.log('%cGame engine loaded successfully! Classes initialized in correct order.', 'color: #22c55e; font-weight: bold;');
 console.log('Repository: https://github.com/colindacity/fantasy-journey');
@@ -785,8 +785,7 @@ class LibraryScene extends Phaser.Scene {
 
 class BookstoreScene extends LibraryScene {
   constructor() {
-    super();
-    this.scene.key = 'BookstoreScene';
+    super({ key: 'BookstoreScene' });
   }
 
   create() {
@@ -797,8 +796,7 @@ class BookstoreScene extends LibraryScene {
 
 class AuthorLandScene extends LibraryScene {
   constructor() {
-    super();
-    this.scene.key = 'AuthorLandScene';
+    super({ key: 'AuthorLandScene' });
   }
 
   create() {
@@ -809,8 +807,7 @@ class AuthorLandScene extends LibraryScene {
 
 class WritersWorkshopScene extends LibraryScene {
   constructor() {
-    super();
-    this.scene.key = 'WritersWorkshopScene';
+    super({ key: 'WritersWorkshopScene' });
   }
 
   create() {
@@ -821,8 +818,7 @@ class WritersWorkshopScene extends LibraryScene {
 
 class PlayerHomeScene extends LibraryScene {
   constructor() {
-    super();
-    this.scene.key = 'PlayerHomeScene';
+    super({ key: 'PlayerHomeScene' });
   }
 
   create() {
