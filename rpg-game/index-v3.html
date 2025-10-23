@@ -396,7 +396,7 @@
     // Auto cache-buster using current timestamp
     const cacheBuster = Date.now();
     const script = document.createElement('script');
-    script.src = 'game.js?v=' + cacheBuster;
+    script.src = 'game-v3.js?v=' + cacheBuster;
     script.onerror = function() {
       console.error('Failed to load game script');
       document.getElementById('loadingText').textContent = 'Error loading game. Please refresh.';
