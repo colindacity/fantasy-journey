@@ -653,9 +653,61 @@ class ProgressTracker {
     }
 
     updateStats() {
-        // Could show progress in UI
-        const percentage = (this.visited.size / fantasyData.nodes.length * 100).toFixed(1);
-        console.log(`Reading Journey Progress: ${this.visited.size}/${fantasyData.nodes.length} books explored (${percentage}%)`);
+        // Update UI progress indicators
+        const totalBooks = fantasyData.nodes.length;
+        const percentage = (this.visited.size / totalBooks * 100).toFixed(1);
+
+        // Update progress bar
+        const progressFill = document.getElementById('progress-fill');
+        if (progressFill) {
+            progressFill.style.width = `${percentage}%`;
+        }
+
+        // Update counter
+        const booksExplored = document.getElementById('books-explored');
+        const totalBooksElement = document.getElementById('total-books');
+        if (booksExplored) {
+            booksExplored.textContent = this.visited.size;
+        }
+        if (totalBooksElement) {
+            totalBooksElement.textContent = totalBooks;
+        }
+
+        // Console log
+        console.log(`📚 Reading Journey Progress: ${this.visited.size}/${totalBooks} books explored (${percentage}%)`);
+
+        // Achievement unlocked
+        if (this.visited.size === 10 && !localStorage.getItem('achievement_10')) {
+            this.showAchievement('🎯 Explorer!', 'You\'ve discovered 10 books!');
+            localStorage.setItem('achievement_10', 'true');
+        }
+        if (this.visited.size === 25 && !localStorage.getItem('achievement_25')) {
+            this.showAchievement('📚 Bookworm!', 'You\'ve explored 25 books!');
+            localStorage.setItem('achievement_25', 'true');
+        }
+        if (this.visited.size === totalBooks && !localStorage.getItem('achievement_all')) {
+            this.showAchievement('🏆 Master Reader!', 'You\'ve discovered ALL books!');
+            localStorage.setItem('achievement_all', 'true');
+        }
+    }
+
+    showAchievement(title, message) {
+        // Simple achievement notification
+        const achievement = document.createElement('div');
+        achievement.className = 'achievement-toast';
+        achievement.innerHTML = `
+            <div class="achievement-content">
+                <h4>${title}</h4>
+                <p>${message}</p>
+            </div>
+        `;
+        document.body.appendChild(achievement);
+
+        setTimeout(() => achievement.classList.add('show'), 100);
+        setTimeout(() => {
+            achievement.classList.remove('show');
+            setTimeout(() => achievement.remove(), 300);
+        }, 3000);
     }
 
     reset() {

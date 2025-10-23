@@ -379,9 +379,34 @@ body {
     color: var(--text-primary);
 }
 
-.map-header p {
+.map-instructions {
     color: var(--text-muted);
     font-size: 1.1rem;
+    margin-bottom: var(--space-md);
+}
+
+.start-button {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-weight: 700;
+    padding: 1rem 2.5rem;
+    background: var(--gradient-gold);
+    color: var(--darker-bg);
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(251, 191, 36, 0.4);
+    margin: var(--space-sm) 0;
+}
+
+.start-button:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 30px rgba(251, 191, 36, 0.6);
+}
+
+.start-button:active {
+    transform: translateY(-1px) scale(1.02);
 }
 
 .map-controls {
@@ -700,6 +725,39 @@ body {
     background: var(--accent-cyan);
     border-color: var(--primary-gold);
     border-width: 3px;
+}
+
+.progress-section {
+    margin-top: var(--space-md);
+    padding-top: var(--space-sm);
+    border-top: 1px solid rgba(139, 92, 246, 0.2);
+}
+
+.progress-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.progress-label strong {
+    color: var(--primary-gold);
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: rgba(139, 92, 246, 0.2);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--gradient-gold);
+    border-radius: 10px;
+    width: 0%;
+    transition: width 0.5s ease;
+    box-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
 }
 
 /* ========================================
@@ -1117,6 +1175,56 @@ body {
 }
 
 /* ========================================
+   ACHIEVEMENT TOASTS
+   ======================================== */
+.achievement-toast {
+    position: fixed;
+    top: -100px;
+    right: 2rem;
+    background: var(--card-bg);
+    backdrop-filter: blur(20px);
+    border: 2px solid var(--primary-gold);
+    border-radius: 16px;
+    padding: var(--space-md);
+    min-width: 300px;
+    box-shadow: var(--shadow-lg), 0 0 30px rgba(251, 191, 36, 0.4);
+    z-index: 1100;
+    transition: top 0.3s ease;
+}
+
+.achievement-toast.show {
+    top: 6rem;
+}
+
+.achievement-content h4 {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+    background: var(--gradient-gold);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.achievement-content p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .achievement-toast {
+        right: 1rem;
+        left: 1rem;
+        min-width: auto;
+    }
+
+    .achievement-toast.show {
+        top: 5rem;
+    }
+}
+
+/* ========================================
    ACCESSIBILITY - FOCUS INDICATORS
    ======================================== */
 /* Fixed: Add visible focus states for WCAG compliance */
@@ -1148,6 +1256,36 @@ a:focus-visible {
    RESPONSIVE DESIGN
    ======================================== */
 @media (max-width: 768px) {
+    .compact-header {
+        padding: 1rem 0;
+    }
+
+    .header-title {
+        font-size: clamp(1.3rem, 5vw, 1.8rem);
+    }
+
+    .header-subtitle {
+        font-size: 0.85rem;
+    }
+
+    .welcome-tooltip {
+        max-width: 90%;
+        padding: var(--space-md);
+    }
+
+    .welcome-tooltip h3 {
+        font-size: 1.5rem;
+    }
+
+    .tooltip-actions {
+        flex-direction: column;
+    }
+
+    .tooltip-btn,
+    .tooltip-btn-outline {
+        width: 100%;
+    }
+
     .modal-body {
         grid-template-columns: 1fr;
     }
@@ -1169,6 +1307,8 @@ a:focus-visible {
         left: 50%;
         transform: translateX(-50%);
         bottom: 5rem;
+        font-size: 0.85rem;
+        padding: var(--space-sm);
     }
 
     .info-panel {
@@ -1182,6 +1322,18 @@ a:focus-visible {
 
     .map-container {
         height: 600px;
+    }
+
+    .map-section {
+        padding: var(--space-md) 0;
+    }
+
+    .map-header h2 {
+        font-size: 1.8rem;
+    }
+
+    .map-header p {
+        font-size: 0.9rem;
     }
 }
 

@@ -22,7 +22,10 @@
     <section class="map-section map-section-hero" id="map-section">
         <div class="map-header">
             <h2>Your Reading Journey Awaits</h2>
-            <p>Click on books to explore • Drag to navigate • Scroll to zoom</p>
+            <p class="map-instructions">Click on books to explore • Drag to navigate • Scroll to zoom</p>
+            <button id="start-hobbit" class="start-button pulse" onclick="startJourney()" aria-label="Start with The Hobbit">
+                🏔️ Start with The Hobbit
+            </button>
         </div>
 
         <div class="map-controls">
@@ -76,7 +79,7 @@
             </svg>
         </div>
 
-        <!-- Legend -->
+        <!-- Legend & Progress -->
         <div class="map-legend">
             <h3>Legend</h3>
             <div class="legend-item">
@@ -94,6 +97,14 @@
             <div class="legend-item">
                 <span class="legend-color must-read"></span>
                 <span>Must Read (⭐)</span>
+            </div>
+            <div class="progress-section">
+                <div class="progress-label">
+                    <span>📚 Explored: <strong id="books-explored">0</strong>/<strong id="total-books">50+</strong></span>
+                </div>
+                <div class="progress-bar">
+                    <div id="progress-fill" class="progress-fill"></div>
+                </div>
             </div>
         </div>
     </section>
