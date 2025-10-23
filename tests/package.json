@@ -1,13 +1,21 @@
 {
-  "name": "fantasy-reading-guide-tests",
-  "version": "1.0.0",
-  "description": "Automated tests for Fantasy Reading Quest RPG",
+  "name": "fantasy-journey-comprehensive-tests",
+  "version": "2.0.0",
+  "description": "Comprehensive automated testing for Fantasy Journey apps with LLM-based expert reviews",
   "scripts": {
     "test": "playwright test",
     "test:ui": "playwright test --ui",
     "test:debug": "playwright test --debug",
     "test:headed": "playwright test --headed",
-    "test:report": "playwright show-report"
+    "test:report": "playwright show-report",
+    "test:rpg": "playwright test rpg-game.spec.js",
+    "test:guide": "playwright test fantasy-reading-guide.spec.js",
+    "test:visual": "playwright test visual-regression.spec.js",
+    "test:flows": "playwright test user-flows.spec.js",
+    "test:mobile": "playwright test --project='Mobile Chrome' --project='Mobile Safari'",
+    "test:desktop": "playwright test --project='chromium' --project='firefox' --project='webkit'",
+    "test:comprehensive": "node run-comprehensive-testing.js",
+    "update-snapshots": "playwright test --update-snapshots"
   },
   "devDependencies": {
     "@playwright/test": "^1.40.0"
