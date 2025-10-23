@@ -10,61 +10,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-background"></div>
-        <div class="hero-content">
-            <h1 class="hero-title">The Ultimate Fantasy Reading Guide</h1>
-            <p class="hero-subtitle">Where to Start & Find What You Like</p>
-            <p class="hero-quote">"Let's be real. This is far from the weirdest start to one of my videos there's ever been."</p>
-            <div class="hero-video">
-                <iframe
-                    width="560"
-                    height="315"
-                    src="https://www.youtube.com/embed/T0G-yYbqpNc"
-                    title="The ULTIMATE Fantasy Reading Guide"
-                    frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen>
-                </iframe>
-            </div>
-            <button class="cta-button" onclick="scrollToMap()" aria-label="Begin your fantasy reading journey">Begin Your Journey</button>
+    <!-- Compact Header -->
+    <header class="compact-header">
+        <div class="header-content">
+            <h1 class="header-title">🗺️ The Ultimate Fantasy Reading Guide</h1>
+            <p class="header-subtitle">Discover Your Perfect Fantasy Subgenre Through Interactive Exploration</p>
         </div>
-        <div class="scroll-indicator">
-            <div class="scroll-arrow"></div>
-        </div>
-    </section>
+    </header>
 
-    <!-- Introduction Section -->
-    <section class="intro-section">
-        <div class="container">
-            <h2>Find Your Perfect Fantasy Subgenre</h2>
-            <p class="intro-text">
-                "Today I am going to evolve that concept so much further because we are not just going to be telling you good starting points for fantasy.
-                But instead I am going to dive deep into a methodology to find which specific subgenre you may become addicted to."
-            </p>
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">📚</div>
-                    <h3>Interactive Map</h3>
-                    <p>Navigate through fantasy literature like exploring a fantasy world</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🗺️</div>
-                    <h3>Choose Your Path</h3>
-                    <p>Answer questions about what you enjoy to find your perfect match</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">✨</div>
-                    <h3>Discover Subgenres</h3>
-                    <p>From cozy fantasy to grim dark, find what speaks to you</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Interactive Map Section -->
-    <section class="map-section" id="map-section">
+    <!-- Interactive Map Section - NOW AT THE TOP! -->
+    <section class="map-section map-section-hero" id="map-section">
         <div class="map-header">
             <h2>Your Reading Journey Awaits</h2>
             <p>Click on books to explore • Drag to navigate • Scroll to zoom</p>
@@ -75,6 +30,24 @@
             <button class="control-btn" id="zoom-out" title="Zoom Out" aria-label="Zoom out from the fantasy map">−</button>
             <button class="control-btn" id="reset-view" title="Reset View" aria-label="Reset map view to original position">⟲</button>
             <button class="control-btn" id="toggle-paths" title="Toggle Paths" aria-label="Toggle connection paths visibility">🛤️</button>
+        </div>
+
+        <!-- Loading Indicator -->
+        <div id="map-loading" class="map-loading">
+            <div class="loading-spinner"></div>
+            <p>Loading your reading journey...</p>
+        </div>
+
+        <!-- Welcome Tooltip -->
+        <div id="welcome-tooltip" class="welcome-tooltip">
+            <button class="tooltip-close" onclick="dismissWelcome()" aria-label="Close welcome message">×</button>
+            <h3>🎯 Welcome, Reader!</h3>
+            <p>Start your journey by clicking on <strong>The Hobbit</strong> (gold node) in the center of the map.</p>
+            <p>Answer questions about what you enjoyed to discover your perfect fantasy subgenre!</p>
+            <div class="tooltip-actions">
+                <button class="tooltip-btn" onclick="startJourney()">Start Journey</button>
+                <button class="tooltip-btn-outline" onclick="dismissWelcome()">Explore Freely</button>
+            </div>
         </div>
 
         <div class="map-container">
@@ -121,6 +94,61 @@
             <div class="legend-item">
                 <span class="legend-color must-read"></span>
                 <span>Must Read (⭐)</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section with Video -->
+    <section class="about-section">
+        <div class="container">
+            <h2>About This Guide</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p class="lead-quote">
+                        "Let's be real. This is far from the weirdest start to one of my videos there's ever been."
+                    </p>
+                    <p>
+                        This interactive experience is based on the methodology from <strong>The ULTIMATE Fantasy Reading Guide</strong> YouTube video.
+                        Instead of just telling you good starting points for fantasy, we're diving deep into a methodology to find which specific subgenre you may become addicted to.
+                    </p>
+                    <div class="feature-highlights">
+                        <div class="highlight-item">
+                            <span class="highlight-icon">📚</span>
+                            <div>
+                                <h4>50+ Curated Books</h4>
+                                <p>Handpicked recommendations across every fantasy subgenre</p>
+                            </div>
+                        </div>
+                        <div class="highlight-item">
+                            <span class="highlight-icon">🎯</span>
+                            <div>
+                                <h4>Decision-Based Navigation</h4>
+                                <p>Answer questions about what you enjoyed to find your perfect match</p>
+                            </div>
+                        </div>
+                        <div class="highlight-item">
+                            <span class="highlight-icon">🗺️</span>
+                            <div>
+                                <h4>Visual Journey</h4>
+                                <p>Explore fantasy literature like navigating a fantasy world map</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-video">
+                    <div class="video-wrapper">
+                        <iframe
+                            width="100%"
+                            height="100%"
+                            src="https://www.youtube.com/embed/T0G-yYbqpNc"
+                            title="The ULTIMATE Fantasy Reading Guide"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                    <p class="video-caption">Watch the original guide that inspired this interactive experience</p>
+                </div>
             </div>
         </div>
     </section>

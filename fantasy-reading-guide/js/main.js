@@ -423,13 +423,64 @@ class FantasyGuideApp {
     }
 }
 
-// Utility function to scroll to map
+// Utility function to scroll to map (legacy - map is now at top)
 function scrollToMap() {
     const mapSection = document.getElementById('map-section');
     if (mapSection) {
         mapSection.scrollIntoView({ behavior: 'smooth' });
     }
 }
+
+// Welcome tooltip functions
+function dismissWelcome() {
+    const tooltip = document.getElementById('welcome-tooltip');
+    if (tooltip) {
+        tooltip.classList.add('hidden');
+        localStorage.setItem('welcomeDismissed', 'true');
+    }
+}
+
+function startJourney() {
+    dismissWelcome();
+    // Find and click The Hobbit
+    const hobbitNode = getNodeById('the-hobbit');
+    if (hobbitNode && window.app) {
+        window.app.showBookModal(hobbitNode);
+        if (window.fantasyMap) {
+            window.fantasyMap.focusNode('the-hobbit');
+        }
+    }
+}
+
+// Show welcome on first visit
+function checkWelcome() {
+    const welcomed = localStorage.getItem('welcomeDismissed');
+    const tooltip = document.getElementById('welcome-tooltip');
+
+    if (!welcomed && tooltip) {
+        // Show after a short delay to let map load
+        setTimeout(() => {
+            tooltip.classList.remove('hidden');
+        }, 1500);
+    } else if (tooltip) {
+        tooltip.classList.add('hidden');
+    }
+}
+
+// Hide loading indicator
+function hideLoading() {
+    const loading = document.getElementById('map-loading');
+    if (loading) {
+        loading.classList.add('hidden');
+        setTimeout(() => {
+            loading.style.display = 'none';
+        }, 300);
+    }
+}
+
+// Expose functions globally for onclick handlers
+window.dismissWelcome = dismissWelcome;
+window.startJourney = startJourney;
 
 // Search functionality
 class BookSearch {
@@ -635,6 +686,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Add some visual flair
     addParticleEffect();
+
+    // Hide loading indicator after map loads
+    setTimeout(() => {
+        hideLoading();
+        checkWelcome();
+    }, 1000);
+
+    // Expose app globally
+    window.app = app;
 });
 
 // Particle effect for hero section
