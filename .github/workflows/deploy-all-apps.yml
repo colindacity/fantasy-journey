@@ -251,16 +251,13 @@ jobs:
           path: '_site'
 
   deploy:
-    # Only deploy from main branch to avoid environment protection issues
-    if: github.ref == 'refs/heads/main'
+    # Deploy from main branch or the active feature branch
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/claude/redesign-youtube-clone-011CUP5xmZw5CYhippuyQtLw'
     needs: build
     runs-on: ubuntu-latest
     permissions:
       pages: write
       id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
