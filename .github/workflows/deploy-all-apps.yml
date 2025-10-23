@@ -6,11 +6,6 @@ on:
       - main
       - claude/redesign-youtube-clone-011CUP5xmZw5CYhippuyQtLw
   workflow_dispatch:
-    inputs:
-      version:
-        description: 'Version to deploy (optional)'
-        required: false
-        default: 'auto'
 
 permissions:
   contents: read
@@ -21,16 +16,9 @@ concurrency:
   group: "pages"
   cancel-in-progress: false
 
-env:
-  NODE_ENV: production
-
 jobs:
-  build-and-deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -40,27 +28,17 @@ jobs:
       - name: Generate version info
         id: version
         run: |
-          # Generate version based on commit count and short SHA
           COMMIT_COUNT=$(git rev-list --count HEAD)
           SHORT_SHA=$(git rev-parse --short HEAD)
-          BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
           BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-
-          if [ "${{ github.event.inputs.version }}" != "auto" ] && [ -n "${{ github.event.inputs.version }}" ]; then
-            VERSION="${{ github.event.inputs.version }}"
-          else
-            VERSION="v1.${COMMIT_COUNT}-${SHORT_SHA}"
-          fi
+          VERSION="v1.${COMMIT_COUNT}-${SHORT_SHA}"
 
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
           echo "build_date=${BUILD_DATE}" >> $GITHUB_OUTPUT
           echo "commit_sha=${GITHUB_SHA}" >> $GITHUB_OUTPUT
-          echo "branch=${BRANCH_NAME}" >> $GITHUB_OUTPUT
 
           echo "📦 Building version: ${VERSION}"
           echo "📅 Build date: ${BUILD_DATE}"
-          echo "🔀 Branch: ${BRANCH_NAME}"
-          echo "📝 Commit: ${GITHUB_SHA}"
 
       - name: Create deployment directory
         run: |
@@ -69,62 +47,48 @@ jobs:
 
       - name: Copy root files
         run: |
-          # Copy root index and shared assets
           if [ -f index.html ]; then
             cp index.html _site/
             echo "✅ Copied root index.html"
           fi
-
           if [ -f README.md ]; then
             cp README.md _site/
-            echo "✅ Copied README.md"
           fi
-
           if [ -d shared ]; then
             cp -r shared _site/
-            echo "✅ Copied shared directory"
           fi
 
       - name: Build RPG Game
         run: |
           echo "🎮 Building RPG Game..."
-
           if [ -d rpg-game ]; then
             cp -r rpg-game _site/rpg-game
-
-            # Create version file for RPG game
             cat > _site/rpg-game/version.json << EOF
           {
             "version": "${{ steps.version.outputs.version }}",
             "buildDate": "${{ steps.version.outputs.build_date }}",
             "commitSha": "${{ steps.version.outputs.commit_sha }}",
-            "branch": "${{ steps.version.outputs.branch }}",
             "buildNumber": "${{ github.run_number }}",
-            "repository": "${{ github.repository }}",
-            "deployer": "GitHub Actions",
             "app": "RPG Game"
           }
           EOF
-
-            echo "✅ RPG Game built successfully"
-          else
-            echo "⚠️ rpg-game directory not found"
+            echo "✅ RPG Game built"
           fi
 
       - name: Build Fantasy Reading Guide
         run: |
           echo "📚 Building Fantasy Reading Guide..."
-
           if [ -d fantasy-reading-guide ]; then
             cp -r fantasy-reading-guide _site/fantasy-reading-guide
 
-            # Create version file
+            VERSION="${{ steps.version.outputs.version }}"
+            BUILD_DATE="${{ steps.version.outputs.build_date }}"
+
             cat > _site/fantasy-reading-guide/version.json << EOF
           {
-            "version": "${{ steps.version.outputs.version }}",
-            "buildDate": "${{ steps.version.outputs.build_date }}",
+            "version": "${VERSION}",
+            "buildDate": "${BUILD_DATE}",
             "commitSha": "${{ steps.version.outputs.commit_sha }}",
-            "branch": "${{ steps.version.outputs.branch }}",
             "buildNumber": "${{ github.run_number }}",
             "repository": "${{ github.repository }}",
             "deployer": "GitHub Actions",
@@ -132,27 +96,19 @@ jobs:
           }
           EOF
 
-            # Inject version into HTML
-            VERSION="${{ steps.version.outputs.version }}"
-            BUILD_DATE="${{ steps.version.outputs.build_date }}"
-
-            # Add version meta tags
             sed -i "s|</head>|    <meta name=\"app-version\" content=\"${VERSION}\">\n    <meta name=\"build-date\" content=\"${BUILD_DATE}\">\n</head>|" _site/fantasy-reading-guide/index.html
 
-            # Add cache busting
             sed -i "s|js/data.js|js/data.js?v=${VERSION}|g" _site/fantasy-reading-guide/index.html
             sed -i "s|js/map.js|js/map.js?v=${VERSION}|g" _site/fantasy-reading-guide/index.html
             sed -i "s|js/main.js|js/main.js?v=${VERSION}|g" _site/fantasy-reading-guide/index.html
             sed -i "s|css/styles.css|css/styles.css?v=${VERSION}|g" _site/fantasy-reading-guide/index.html
 
-            echo "✅ Fantasy Reading Guide built successfully"
-          else
-            echo "⚠️ fantasy-reading-guide directory not found"
+            echo "✅ Fantasy Reading Guide built"
           fi
 
-      - name: Create deployment index
+      - name: Create apps index page
         run: |
-          cat > _site/apps-index.html << 'EOF'
+          cat > _site/apps-index.html << 'HTMLEOF'
           <!DOCTYPE html>
           <html lang="en">
           <head>
@@ -160,13 +116,9 @@ jobs:
               <meta name="viewport" content="width=device-width, initial-scale=1.0">
               <title>Fantasy Journey - Apps</title>
               <style>
-                  * {
-                      margin: 0;
-                      padding: 0;
-                      box-sizing: border-box;
-                  }
+                  * { margin: 0; padding: 0; box-sizing: border-box; }
                   body {
-                      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
                       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                       min-height: 100vh;
                       display: flex;
@@ -174,14 +126,11 @@ jobs:
                       justify-content: center;
                       padding: 2rem;
                   }
-                  .container {
-                      max-width: 1200px;
-                      width: 100%;
-                  }
+                  .container { max-width: 1200px; width: 100%; }
                   h1 {
                       color: white;
                       text-align: center;
-                      font-size: 3rem;
+                      font-size: clamp(2rem, 5vw, 3rem);
                       margin-bottom: 3rem;
                       text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
                   }
@@ -195,19 +144,13 @@ jobs:
                       border-radius: 20px;
                       padding: 2rem;
                       box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-                      transition: transform 0.3s ease, box-shadow 0.3s ease;
+                      transition: transform 0.3s ease;
                       text-decoration: none;
                       color: inherit;
                       display: block;
                   }
-                  .app-card:hover {
-                      transform: translateY(-10px);
-                      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-                  }
-                  .app-icon {
-                      font-size: 4rem;
-                      margin-bottom: 1rem;
-                  }
+                  .app-card:hover { transform: translateY(-10px); }
+                  .app-icon { font-size: 4rem; margin-bottom: 1rem; }
                   .app-title {
                       font-size: 1.8rem;
                       color: #667eea;
@@ -226,68 +169,53 @@ jobs:
                       border-radius: 50px;
                       text-decoration: none;
                       font-weight: bold;
-                      transition: opacity 0.3s ease;
-                  }
-                  .app-link:hover {
-                      opacity: 0.9;
                   }
                   .version-info {
                       text-align: center;
                       color: white;
                       margin-top: 3rem;
-                      opacity: 0.8;
-                      font-size: 0.9rem;
+                      opacity: 0.9;
                   }
               </style>
           </head>
           <body>
               <div class="container">
                   <h1>🎮 Fantasy Journey Apps</h1>
-
                   <div class="apps-grid">
                       <a href="fantasy-reading-guide/" class="app-card">
                           <div class="app-icon">📚</div>
                           <h2 class="app-title">Fantasy Reading Guide</h2>
                           <p class="app-description">
-                              An interactive map to discover your perfect fantasy subgenre.
-                              Explore 50+ books with beautiful visualizations and YouTube integration.
+                              Interactive map to discover your perfect fantasy subgenre.
+                              Explore 50+ books with beautiful visualizations.
                           </p>
                           <span class="app-link">Explore Guide →</span>
                       </a>
-
                       <a href="rpg-game/" class="app-card">
                           <div class="app-icon">⚔️</div>
                           <h2 class="app-title">RPG Adventure Game</h2>
                           <p class="app-description">
                               Embark on an epic text-based RPG adventure.
-                              Battle monsters, explore dungeons, and become a legend!
+                              Battle monsters and explore dungeons!
                           </p>
                           <span class="app-link">Start Adventure →</span>
                       </a>
                   </div>
-
-                  <div class="version-info" id="version-info">
-                      Loading version info...
-                  </div>
+                  <div class="version-info" id="version-info">Fantasy Journey Apps</div>
               </div>
-
               <script>
-              // Load version info
-              fetch('fantasy-reading-guide/version.json')
+              fetch('version.json')
                   .then(r => r.json())
-                  .then(data => {
+                  .then(d => {
                       document.getElementById('version-info').textContent =
-                          `Version ${data.version} | Build #${data.buildNumber} | ${new Date(data.buildDate).toLocaleDateString()}`;
+                          'Version ' + d.version + ' | Build #' + d.buildNumber;
                   })
-                  .catch(() => {
-                      document.getElementById('version-info').textContent = 'Fantasy Journey Apps';
-                  });
+                  .catch(() => {});
               </script>
           </body>
           </html>
-          EOF
-
-          echo "✅ Created apps index page"
+          HTMLEOF
+          echo "✅ Created apps index"
 
       - name: Create global version file
         run: |
@@ -296,7 +224,6 @@ jobs:
             "version": "${{ steps.version.outputs.version }}",
             "buildDate": "${{ steps.version.outputs.build_date }}",
             "commitSha": "${{ steps.version.outputs.commit_sha }}",
-            "branch": "${{ steps.version.outputs.branch }}",
             "buildNumber": "${{ github.run_number }}",
             "repository": "${{ github.repository }}",
             "deployer": "GitHub Actions",
@@ -304,29 +231,15 @@ jobs:
           }
           EOF
 
-          echo "✅ Created global version.json"
-
       - name: Display build summary
         run: |
-          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-          echo "🎯 Build Summary"
-          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-          echo "Version:      ${{ steps.version.outputs.version }}"
-          echo "Build Date:   ${{ steps.version.outputs.build_date }}"
-          echo "Commit:       ${{ steps.version.outputs.commit_sha }}"
-          echo "Branch:       ${{ steps.version.outputs.branch }}"
-          echo "Build #:      ${{ github.run_number }}"
-          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-
-          # List all apps
-          echo "📱 Apps included:"
-          ls -d _site/*/ 2>/dev/null | sed 's/_site\//  - /' | sed 's/\///' || echo "  No app directories found"
-
-          # Calculate total size
-          TOTAL_SIZE=$(du -sh _site 2>/dev/null | cut -f1)
-          echo "💾 Total size: ${TOTAL_SIZE}"
-
-          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "🎯 Build Complete"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "Version: ${{ steps.version.outputs.version }}"
+          echo "Build #: ${{ github.run_number }}"
+          echo "Apps: fantasy-reading-guide, rpg-game"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -336,34 +249,35 @@ jobs:
         with:
           path: '_site'
 
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
 
       - name: Display deployment info
         run: |
-          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           echo "✅ Deployment Successful!"
-          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-          echo "🌐 Main URL: ${{ steps.deployment.outputs.page_url }}"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "🌐 Main: ${{ steps.deployment.outputs.page_url }}"
           echo "📚 Fantasy Guide: ${{ steps.deployment.outputs.page_url }}fantasy-reading-guide/"
           echo "⚔️ RPG Game: ${{ steps.deployment.outputs.page_url }}rpg-game/"
-          echo "📱 Apps Index: ${{ steps.deployment.outputs.page_url }}apps-index.html"
-          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
-      - name: Create deployment summary
+      - name: Create summary
         run: |
-          echo "## 🎉 Fantasy Journey Deployed!" >> $GITHUB_STEP_SUMMARY
+          echo "## 🎉 Deployment Complete!" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### 🌐 Live URLs" >> $GITHUB_STEP_SUMMARY
-          echo "- 🏠 [Main Site](${{ steps.deployment.outputs.page_url }})" >> $GITHUB_STEP_SUMMARY
+          echo "- 📱 [Apps Index](${{ steps.deployment.outputs.page_url }}apps-index.html)" >> $GITHUB_STEP_SUMMARY
           echo "- 📚 [Fantasy Reading Guide](${{ steps.deployment.outputs.page_url }}fantasy-reading-guide/)" >> $GITHUB_STEP_SUMMARY
           echo "- ⚔️ [RPG Game](${{ steps.deployment.outputs.page_url }}rpg-game/)" >> $GITHUB_STEP_SUMMARY
-          echo "- 📱 [Apps Index](${{ steps.deployment.outputs.page_url }}apps-index.html)" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### 📋 Build Details" >> $GITHUB_STEP_SUMMARY
-          echo "- 🏷️ Version: \`${{ steps.version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- 🔨 Build #: \`${{ github.run_number }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- 📝 Commit: \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- 🔀 Branch: \`${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- 👤 Triggered by: \`${{ github.actor }}\`" >> $GITHUB_STEP_SUMMARY
