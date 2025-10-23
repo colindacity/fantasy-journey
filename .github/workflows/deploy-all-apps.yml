@@ -238,6 +238,7 @@ jobs:
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           echo "Version: ${{ steps.version.outputs.version }}"
           echo "Build #: ${{ github.run_number }}"
+          echo "Branch: ${{ github.ref_name }}"
           echo "Apps: fantasy-reading-guide, rpg-game"
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
@@ -250,6 +251,8 @@ jobs:
           path: '_site'
 
   deploy:
+    # Only deploy from main branch to avoid environment protection issues
+    if: github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
     permissions:
