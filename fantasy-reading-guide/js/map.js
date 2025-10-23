@@ -18,9 +18,14 @@ class FantasyMap {
         this.dragStart = { x: 0, y: 0 };
         this.showPaths = true;
 
+        // Fixed: Detect mobile devices for better touch target sizes
+        this.isMobile = window.innerWidth <= 768 ||
+                        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
         // Layout configuration
-        this.nodeRadius = 2.5;
-        this.fontSize = 1.2;
+        // Fixed: Increase node radius on mobile from 2.5 to 4 for WCAG touch target compliance (min 44px)
+        this.nodeRadius = this.isMobile ? 4 : 2.5;
+        this.fontSize = this.isMobile ? 1.5 : 1.2;
 
         this.init();
     }

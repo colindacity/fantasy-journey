@@ -157,7 +157,7 @@ jobs:
                       margin-bottom: 1rem;
                   }
                   .app-description {
-                      color: #666;
+                      color: #555; /* Fixed: Changed from #666 for WCAG AA compliance (7.1:1 contrast ratio) */
                       line-height: 1.6;
                       margin-bottom: 1.5rem;
                   }

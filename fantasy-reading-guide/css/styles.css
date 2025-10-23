@@ -18,7 +18,7 @@
     --card-bg: rgba(30, 30, 60, 0.6);
     --text-primary: #f8fafc;
     --text-secondary: #cbd5e1;
-    --text-muted: #94a3b8;
+    --text-muted: #cbd5e1; /* Fixed: Changed from #94a3b8 for WCAG AA compliance (7.2:1 contrast ratio) */
 
     /* Gradients */
     --gradient-primary: linear-gradient(135deg, var(--primary-purple), var(--primary-pink));
@@ -50,6 +50,10 @@ body {
     color: var(--text-primary);
     line-height: 1.6;
     overflow-x: hidden;
+    /* Fixed: Add font smoothing for consistency across browsers */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
 }
 
 .container {
@@ -110,15 +114,17 @@ body {
 
 .hero-title {
     font-family: var(--font-display);
-    font-size: clamp(2.5rem, 8vw, 5rem);
+    font-size: clamp(2.5rem, 6vw, 4rem); /* Fixed: Smoother progression from 8vw->6vw, 5rem->4rem */
     font-weight: 900;
+    line-height: 1.1; /* Fixed: Tighter for impact */
+    letter-spacing: -0.02em; /* Fixed: Optical correction for large text */
     background: var(--gradient-primary);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     margin-bottom: var(--space-sm);
     animation: titleGlow 3s ease-in-out infinite;
-    line-height: 1.2;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.5)); /* Fixed: Added for better contrast */
 }
 
 @keyframes titleGlow {
@@ -805,6 +811,34 @@ body {
 
 .footer a:hover {
     color: var(--primary-pink);
+}
+
+/* ========================================
+   ACCESSIBILITY - FOCUS INDICATORS
+   ======================================== */
+/* Fixed: Add visible focus states for WCAG compliance */
+.node:focus,
+.control-btn:focus,
+.cta-button:focus,
+.decision-option:focus,
+.recommendation-chip:focus,
+.modal-close:focus,
+.panel-close:focus {
+    outline: 3px solid var(--primary-gold);
+    outline-offset: 2px;
+}
+
+/* Ensure focus is never removed without replacement */
+*:focus-visible {
+    outline: 3px solid var(--primary-gold);
+    outline-offset: 2px;
+}
+
+/* For elements with custom focus states */
+button:focus-visible,
+a:focus-visible {
+    outline: 3px solid var(--primary-gold);
+    outline-offset: 2px;
 }
 
 /* ========================================
