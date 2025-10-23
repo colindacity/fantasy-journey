@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+
+# Test results
+tests/test-results/
+tests/playwright-report/
+tests/.playwright/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
